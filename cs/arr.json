@@ -1,0 +1,377 @@
+{
+  "DATA\\Characters\\Akali\\Akali.inibin": {
+    "847936627": -0.080701754,
+    "2043159165": "AkaliCritAttack",
+    "2811665729": "AkaliCritAttack"
+  },
+  "DATA\\Characters\\Ammon\\Ammon.inibin": {
+    "847936627": -0.10054
+  },
+  "DATA\\Characters\\AncientGolem\\AncientGolem.inibin": {
+    "704374704": true,
+    "2818610673": 50.0
+  },
+  "DATA\\Characters\\Annie\\Annie.inibin": {
+    "847936627": -0.104205247,
+    "1530282403": "SummonerHeal",
+    "1530282404": "SummonerRally"
+  },
+  "DATA\\Characters\\Armordillo\\Armordillo.inibin": {
+    "847936627": -0.070833333
+  },
+  "DATA\\Characters\\Armsmaster\\Armsmaster.inibin": {
+    "847936627": -0.05255100131034851
+  },
+  "DATA\\Characters\\bear\\bear.inibin": {
+    "2818610673": false
+  },
+  "DATA\\Characters\\blueDragon\\blueDragon.inibin": {
+    "2818610673": 50.0
+  },
+  "DATA\\Characters\\Blue_Minion_Basic\\Blue_Minion_Basic.inibin": {
+    "2818610673": 60.0
+  },
+  "DATA\\Characters\\Blue_Minion_Healer\\Blue_Minion_Healer.inibin": {
+    "2818610673": 60.0
+  },
+  "DATA\\Characters\\Blue_Minion_MechCannon\\Blue_Minion_MechCannon.inibin": {
+    "2818610673": 30.0
+  },
+  "DATA\\Characters\\Blue_Minion_Wizard\\Blue_Minion_Wizard.inibin": {
+    "2818610673": 60.0
+  },
+  "DATA\\Characters\\Bowmaster\\Bowmaster.inibin": {
+    "847936627": -0.09605
+  },
+  "DATA\\Characters\\CardMaster\\CardMaster.inibin": {
+    "847936627": -0.055964382
+  },
+  "DATA\\Characters\\Cassiopeia\\Cassiopeia.inibin": {
+    "847936627": -0.108
+  },
+  "DATA\\Characters\\ChaosTurretShrine\\ChaosTurretShrine.inibin": {
+    "2818610673": 16
+  },
+  "DATA\\Characters\\ChemicalMan\\ChemicalMan.inibin": {
+    "847936627": -0.063851264
+  },
+  "DATA\\Characters\\Chronokeeper\\Chronokeeper.inibin": {
+    "847936627": -0.02826
+  },
+  "DATA\\Characters\\Corki\\Corki.inibin": {
+    "847936627": -0.2
+  },
+  "DATA\\Characters\\Corki_FlyingSaucer\\Corki_FlyingSaucer.inibin": {
+    "847936627": -0.2
+  },
+  "DATA\\Characters\\Cryophoenix\\Cryophoenix.inibin": {
+    "847936627": -0.00833333283662796
+  },
+  "DATA\\Characters\\DarkChampion\\DarkChampion.inibin": {
+    "847936627": -0.056666667
+  },
+  "DATA\\Characters\\Dragon\\Dragon.inibin": {
+    "2818610673": 50.0
+  },
+  "DATA\\Characters\\DrMundo\\DrMundo.inibin": {
+    "847936627": -0.147321429
+  },
+  "DATA\\Characters\\Evelynn\\Evelynn.inibin": {
+    "847936627": -0.093201754
+  },
+  "DATA\\Characters\\Ezreal\\Ezreal.inibin": {
+    "2465393612": true,
+    "847936627": -0.043421053
+  },
+  "DATA\\Characters\\FallenAngel\\FallenAngel.inibin": {
+    "847936627": -0.039583333
+  },
+  "DATA\\Characters\\FiddleSticks\\FiddleSticks.inibin": {
+    "847936627": -0.070833333
+  },
+  "DATA\\Characters\\Galio\\Galio.inibin": {
+    "704374704": true,
+    "847936627": -0.087414966
+  },
+  "DATA\\Characters\\Garen\\Garen.inibin": {
+    "847936627": -0.091666667
+  },
+  "DATA\\Characters\\GemKnight\\GemKnight.inibin": {
+    "847936627": -0.044904541
+  },
+  "DATA\\Characters\\Ghast\\Ghast.inibin": {
+    "2818610673": 50.0
+  },
+  "DATA\\Characters\\GiantWolf\\GiantWolf.inibin": {
+    "2818610673": 50.0
+  },
+  "DATA\\Characters\\Golem\\Golem.inibin": {
+    "2818610673": 50.0
+  },
+  "DATA\\Characters\\Gragas\\Gragas.inibin": {
+    "847936627": -0.006163193844258785
+  },
+  "DATA\\Characters\\GreenTerror\\GreenTerror.inibin": {
+    "847936627": 0
+  },
+  "DATA\\Characters\\Heimerdinger\\Heimerdinger.inibin": {
+    "847936627": -0.069921875
+  },
+  "DATA\\Characters\\Heimerdinger_Turret\\Heimerdinger_Turret.inibin": {
+    "2299176382": 50.0
+  },
+  "DATA\\Characters\\IceBlock\\IceBlock.inibin": {
+    "2818610673": false
+  },
+  "DATA\\Characters\\Irelia\\Irelia.inibin": {
+    "847936627": -0.03404200077056885
+  },
+  "DATA\\Characters\\Janna\\Janna.inibin": {
+    "847936627": -0.05249999836087227
+  },
+  "DATA\\Characters\\Jester\\Jester.inibin": {
+    "847936627": -0.078496169
+  },
+  "DATA\\Characters\\Judicator\\Judicator.inibin": {
+    "847936627": -0.051984127
+  },
+  "DATA\\Characters\\Katarina\\Katarina.inibin": {
+    "847936627": -0.03684199973940849
+  },
+  "DATA\\Characters\\Kennen\\Kennen.inibin": {
+    "847936627": -0.041107919067144394
+  },
+  "DATA\\Characters\\KogMaw\\KogMaw.inibin": {
+    "847936627": -0.056205674
+  },
+  "DATA\\Characters\\KogMaw_Dead\\KogMaw_Dead.inibin": {
+    "847936627": 0
+  },
+  "DATA\\Characters\\Leblanc\\Leblanc.inibin": {
+    "847936627": -0.133333333
+  },
+  "DATA\\Characters\\LesserWraith\\LesserWraith.inibin": {
+    "2818610673": 50.0
+  },
+  "DATA\\Characters\\Lich\\Lich.inibin": {
+    "847936627": 0.04374999925494194
+  },
+  "DATA\\Characters\\Lizard\\Lizard.inibin": {
+    "2818610673": 50.0
+  },
+  "DATA\\Characters\\LizardElder\\LizardElder.inibin": {
+    "2818610673": 50.0
+  },
+  "DATA\\Characters\\Lux\\Lux.inibin": {
+    "2984454022": 0.8799999952316284,
+    "847936627": -0.091666667
+  },
+  "DATA\\Characters\\Malphite\\Malphite.inibin": {
+    "704374704": true,
+    "847936627": -0.050318878,
+    "1530282403": "SummonerHeal",
+    "1530282404": "SummonerRally"
+  },
+  "DATA\\Characters\\Malzahar\\Malzahar.inibin": {
+    "847936627": 0
+  },
+  "DATA\\Characters\\MalzaharVoidling\\MalzaharVoidling.inibin": {
+    "2818610673": false
+  },
+  "DATA\\Characters\\MasterYi\\MasterYi.inibin": {
+    "847936627": -0.05624999850988388,
+    "1530282403": "SummonerHeal",
+    "1530282404": "SummonerRally"
+  },
+  "DATA\\Characters\\Minotaur\\Minotaur.inibin": {
+    "847936627": -0.110855263,
+    "1530282403": "SummonerHeal",
+    "1530282404": "SummonerRally"
+  },
+  "DATA\\Characters\\MissFortune\\MissFortune.inibin": {
+    "847936627": -0.151993366
+  },
+  "DATA\\Characters\\Mordekaiser\\Mordekaiser.inibin": {
+    "847936627": -0.057142857
+  },
+  "DATA\\Characters\\Nasus\\Nasus.inibin": {
+    "847936627": -0.098603652,
+    "1530282403": "SummonerHeal",
+    "1530282404": "SummonerRally"
+  },
+  "DATA\\Characters\\Nidalee\\Nidalee.inibin": {
+    "847936627": -0.092292024
+  },
+  "DATA\\Characters\\Nidalee_Cougar\\Nidalee_Cougar.inibin": {
+    "847936627": -0.132493568
+  },
+  "DATA\\Characters\\Nidalee_Spear\\Nidalee_Spear.inibin": {
+    "2818610673": 60.0
+  },
+  "DATA\\Characters\\Olaf\\Olaf.inibin": {
+    "847936627": -0.06562499701976776
+  },
+  "DATA\\Characters\\OlafAxe\\OlafAxe.inibin": {
+    "2818610673": 60.0
+  },
+  "DATA\\Characters\\OrderTurretShrine\\OrderTurretShrine.inibin": {
+    "2818610673": 16
+  },
+  "DATA\\Characters\\Pantheon\\Pantheon.inibin": {
+    "847936627": -0.09687499701976776
+  },
+  "DATA\\Characters\\Pirate\\Pirate.inibin": {
+    "847936627": 0
+  },
+  "DATA\\Characters\\PlagueBlock\\PlagueBlock.inibin": {
+    "2818610673": false
+  },
+  "DATA\\Characters\\Poppy\\Poppy.inibin": {
+    "847936627": -0.08315999805927277
+  },
+  "DATA\\Characters\\redDragon\\redDragon.inibin": {
+    "2818610673": 50.0
+  },
+  "DATA\\Characters\\Red_Minion_Basic\\Red_Minion_Basic.inibin": {
+    "2818610673": 60.0
+  },
+  "DATA\\Characters\\Red_Minion_MechCannon\\Red_Minion_MechCannon.inibin": {
+    "2818610673": 30.0
+  },
+  "DATA\\Characters\\Red_Minion_Wizard\\Red_Minion_Wizard.inibin": {
+    "2818610673": 60.0
+  },
+  "DATA\\Characters\\Ryze\\Ryze.inibin": {
+    "847936627": -0.039453125,
+    "1530282403": "SummonerHeal",
+    "1530282404": "SummonerRally"
+  },
+  "DATA\\Characters\\SadMummy\\SadMummy.inibin": {
+    "847936627": -0.066156463
+  },
+  "DATA\\Characters\\Shen\\Shen.inibin": {
+    "847936627": -0.126388889,
+    "1530282403": "SummonerHeal",
+    "1530282404": "SummonerRally"
+  },
+  "DATA\\Characters\\Sion\\Sion.inibin": {
+    "847936627": -0.075412088
+  },
+  "DATA\\Characters\\Sivir\\Sivir.inibin": {
+    "847936627": -0.06300000101327896,
+    "1530282403": "SummonerHeal",
+    "1530282404": "SummonerRally"
+  },
+  "DATA\\Characters\\Sona\\Sona.inibin": {
+    "847936627": -0.128178694
+  },
+  "DATA\\Characters\\Soraka\\Soraka.inibin": {
+    "847936627": 0.012187499552965164,
+    "1530282403": "SummonerHeal",
+    "1530282404": "SummonerRally"
+  },
+  "DATA\\Characters\\SpellBook1\\SpellBook1.inibin": {
+    "2818610673": 60.0
+  },
+  "DATA\\Characters\\SteamGolem\\SteamGolem.inibin": {
+    "847936627": -0.029999999329447746
+  },
+  "DATA\\Characters\\Summoner_Rider_Chaos\\Summoner_Rider_Chaos.inibin": {
+    "2818610673": 30.0
+  },
+  "DATA\\Characters\\Summoner_Rider_Order\\Summoner_Rider_Order.inibin": {
+    "2818610673": 30.0
+  },
+  "DATA\\Characters\\Swain\\Swain.inibin": {
+    "847936627": -0.133333333
+  },
+  "DATA\\Characters\\SwainBeam\\SwainBeam.inibin": {
+    "847936627": -0.0917
+  },
+  "DATA\\Characters\\Swain_noBird\\Swain_noBird.inibin": {
+    "847936627": -0.13333333
+  },
+  "DATA\\Characters\\Swain_Raven\\Swain_Raven.inibin": {
+    "847936627": -0.091666667
+  },
+  "DATA\\Characters\\Teemo\\Teemo.inibin": {
+    "847936627": -0.0842565968632698
+  },
+  "DATA\\Characters\\TestCube\\TestCube.inibin": {
+    "2818610673": 60.0
+  },
+  "DATA\\Characters\\TestCubeRender\\TestCubeRender.inibin": {
+    "2818610673": 60.0
+  },
+  "DATA\\Characters\\Tristana\\Tristana.inibin": {
+    "847936627": -0.151993366
+  },
+  "DATA\\Characters\\Trundle\\Trundle.inibin": {
+    "847936627": -0.091666667
+  },
+  "DATA\\Characters\\Tutorial_Blue_Minion_Basic\\Tutorial_Blue_Minion_Basic.inibin": {
+    "2818610673": 60.0
+  },
+  "DATA\\Characters\\Tutorial_Blue_Minion_Wizard\\Tutorial_Blue_Minion_Wizard.inibin": {
+    "2818610673": 60.0
+  },
+  "DATA\\Characters\\Tutorial_Red_Minion_Basic\\Tutorial_Red_Minion_Basic.inibin": {
+    "2818610673": 60.0
+  },
+  "DATA\\Characters\\Tutorial_Red_Minion_Wizard\\Tutorial_Red_Minion_Wizard.inibin": {
+    "2818610673": 60.0
+  },
+  "DATA\\Characters\\TwistedLizardElder\\TwistedLizardElder.inibin": {
+    "2818610673": 50.0
+  },
+  "DATA\\Characters\\Twitch\\Twitch.inibin": {
+    "847936627": -0.066084019
+  },
+  "DATA\\Characters\\Udyr\\Udyr.inibin": {
+    "847936627": -0.1015779972076416
+  },
+  "DATA\\Characters\\UdyrPhoenix\\UdyrPhoenix.inibin": {
+    "847936627": -0.1015779972076416
+  },
+  "DATA\\Characters\\UdyrTiger\\UdyrTiger.inibin": {
+    "847936627": -0.1015779972076416
+  },
+  "DATA\\Characters\\UdyrTurtle\\UdyrTurtle.inibin": {
+    "847936627": -0.1015779972076416
+  },
+  "DATA\\Characters\\Urf\\Urf.inibin": {
+    "2818610673": 50.0
+  },
+  "DATA\\Characters\\Urgot\\Urgot.inibin": {
+    "847936627": -0.171134021
+  },
+  "DATA\\Characters\\Veigar\\Veigar.inibin": {
+    "847936627": -0.10906250029802322
+  },
+  "DATA\\Characters\\Vladimir\\Vladimir.inibin": {
+    "847936627": -0.07210899889469147
+  },
+  "DATA\\Characters\\Voidwalker\\Voidwalker.inibin": {
+    "847936627": -0.128556807
+  },
+  "DATA\\Characters\\Wolfman\\Wolfman.inibin": {
+    "847936627": -0.004695991985499859
+  },
+  "DATA\\Characters\\Worm\\Worm.inibin": {
+    "2818610673": 16
+  },
+  "DATA\\Characters\\Wraith\\Wraith.inibin": {
+    "2818610673": 50.0
+  },
+  "DATA\\Characters\\XenZhao\\XenZhao.inibin": {
+    "847936627": -0.0774800032377243
+  },
+  "DATA\\Characters\\Yeti\\Yeti.inibin": {
+    "847936627": -0.106414,
+    "1530282403": "SummonerHeal",
+    "1530282404": "SummonerRally"
+  },
+  "DATA\\Characters\\YoungLizard\\YoungLizard.inibin": {
+    "2818610673": 50.0
+  }
+}
