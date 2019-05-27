@@ -1,7 +1,22 @@
 #!/usr/bin/env python
-from inibin import ihash
+from .inibin import ihash
+from sys import stderr
 
 # Note: rito likes to use ' and * prefixes to "comment out" stuff
+
+all_gamemodes = [
+    "ARAM",
+    "CLASSIC",
+    "FIRSTBLOOD",
+    "ODIN",
+    "TUTORIAL",
+    "ASCENSION",
+    "URF",
+]
+all_mutators = [
+    *all_gamemodes,
+]
+
 all_inibin_fixlist = [
 # LEVELS/MapX/DeathTimes.inibin
     {
@@ -40,6 +55,54 @@ all_inibin_fixlist = [
             *[ "Level{:02}".format(x) for x in range(0, 31) ]
         ]  
     },
+# LEVELS/MapX/Items.inibin
+    {
+        "sections":[ 
+            "ItemInclusionList",
+            "UnpurchasableItemList",
+            *[ "UnpurchasableItemList_{}".format(x) for x in all_mutators ],
+        ],
+        "names":[
+            *[ "Item{}".format(x) for x in range(0, 200) ]
+        ]
+    },
+# LEVELS/MapX/NeutralTimers.inibin
+    {
+        "sections": [ "General" ],
+        "names": [ 
+            *[ "Element{}".format(x) for x in range(0, 10) ],
+            *[ "Element{}_{}".format(x, y) for x in range(0, 10) for y in [
+                    "Default",
+                    "Colorblind",
+                    "Spectator",
+                ]
+            ],
+            "HudFrameHandle",
+            "HudGroup",
+            "RespawnTime",
+            "TimerTooltip",
+            "TimerWarningThreshold",
+        ],
+    },
+    {
+        "sections": [
+            *[ "Timer{}".format(x) for x in range(0, 10) ]
+        ],
+        "names": [
+            "HudHandleText",
+            "HudHandleIcon",
+            *[ "HudHandleIcon_{}".format(x) for x in [
+                    "Default",
+                    "Colorblind",
+                    "Spectator",
+                ]
+            ],
+            "TimerType",
+            "TooltipName",
+            "TooltipRespawn",
+            "TimerWarningThreshold",
+        ]
+    },
 # LEVELS/MapX/ExpCurve.inibin
     {
         "sections": [ "EXP", "EXPTutorial" ], 
@@ -65,12 +128,8 @@ all_inibin_fixlist = [
 # DATA/Globals/Bounty.inibin
     {
         "sections": [
-            "ARAM",
-            "CLASSIC",
-            "FIRSTBLOOD",
-            "ODIN",
-            "TUTORIAL",
-            "Global"
+            "Global",
+            *all_gamemodes
         ], 
         "names": [
             "AssistDeathstreakReduction",
@@ -1103,36 +1162,15 @@ all_inibin_fixlist = [
 def add2fixdict(section, name, result = None):
     if result == None:
         result = {}
-    h = str(ihash(section, name))
+    h = ihash(section, name)
     if h in result:
         old = result[h]
         if old[0].lower() != section.lower() or old[1].lower() != name.lower():
-            print("Collision", section, name, "=", h, "with", old[0], old[1])
+            stderr.write("Collision {} {}*{} with {}*{}!\n".format(h, section, name, old[0], old[1]))
     else:
         result[h] = [section, name]
     return result
-    
-# converts map to fix dictionary
-def map2fixdict(m, result = None):
-    if result == None:
-        result = {}
-    for section in m:
-        for name in m[section]:
-            add2fixdict(section, name, result)
-    return result
 
-def fixdict2map(fd, result = None):
-    if result == None:
-        result = {}
-    for h in fd:
-        section = fd[h][0]
-        name = fd[h][1]
-        if not section in result:
-            result[section] = {}
-        result[section][name] = h
-    return result
-
-# converts fix list to fix dict
 def fixlist2fixdict(arr, result = None):
     if result == None:
         result = {}
@@ -1144,8 +1182,6 @@ def fixlist2fixdict(arr, result = None):
     return result
 all_inibin_fixdict = fixlist2fixdict(all_inibin_fixlist)
 
-
-# WARNING: keep inibin and troybin separate because they like to conflict
 # unhashes .inibin with dictionary
 def fix(inib, fixd = None):
     if fixd == None:
@@ -1157,10 +1193,23 @@ def fix(inib, fixd = None):
     unk = inib["UNKNOWN_HASHES"]
     values = inib["Values"]
     for h in unk.copy():
-        if h in fixd:
-            section = fixd[h][0]
-            name = fixd[h][1]
+        hint = int(h)
+        if hint in fixd:
+            section = fixd[hint][0]
+            name = fixd[hint][1]
             if not section in values:
                 values[section] = {}
             values[section][name] = unk[h]
             del unk[h]
+            
+def fix_dry(inib, fixd = None):
+    unfixed = 0
+    if fixd == None:
+        fixd = all_inibin_fixdict
+    if "UNKNOWN_HASHES" in inib:
+        unfixed = len(inib["UNKNOWN_HASHES"])
+        for h in inib["UNKNOWN_HASHES"]:
+            if int(h) in fixd:
+                unfixed -= 1
+    return unfixed
+        
