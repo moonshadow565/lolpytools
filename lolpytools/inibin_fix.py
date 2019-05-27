@@ -1,75 +1,78 @@
 #!/usr/bin/env python
-import struct
-import io
-import math
-import json
-import re
+from inibin import ihash
 
-#Hashes string if two given hashesh "section*name" (asterix included)
-def ihash(section, name = None):
-    if not name == None:
-        section = section + '*' + name
-    ret = 0
-    for c in section:
-        ret = (ord(c.lower()) +((65599 * ret) & 0xffffffff)) & 0xffffffff
-    return ret
-    
 # Note: rito likes to use ' and * prefixes to "comment out" stuff
 all_inibin_fixlist = [
 # LEVELS/MapX/DeathTimes.inibin
-    [
-        [ "DeathTimeScaling" ], [
+    {
+        "sections": [ "DeathTimeScaling" ],
+        "names": [
             "IncrementTime",
             "PercentCap",
             "PercentIncrease",
             "StartTime",
         ]
-    ],
-    [
-        [ "DeathTimeSettings" ], [
+    },
+    {
+        "sections": [ "DeathTimeSettings" ], 
+        "names": [
             "AllowDeathTimeMods",
             "StartDeathTimerForZombies",
         ]
-    ],
-    [
-        [ "DeathWaveRespawn" ], [
+    },
+    {
+        "sections": [ "DeathWaveRespawn" ], 
+        "names": [
             "WaveRespawnInterval",
         ]
-    ],
-    [
-        [ "ExpGrantedOnDeath" ], [
+    },
+    {
+        "sections": [ "ExpGrantedOnDeath" ], 
+        "names": [
             "BaseExpMultiple",
             "LevelDifferenceExpMultiple",
             "MinimumExpMultiple",
         ]
-    ],
-    [
-        [ "TimeDeadPerLevel", "TimeDeadPerLevelTutorial" ],[
+    },
+    {
+        "sections": [ "TimeDeadPerLevel", "TimeDeadPerLevelTutorial" ],
+        "names": [
             *[ "Level{:02}".format(x) for x in range(0, 31) ]
         ]  
-    ],
+    },
 # LEVELS/MapX/ExpCurve.inibin
-    [
-        [ "EXP", "EXPTutorial" ], [
+    {
+        "sections": [ "EXP", "EXPTutorial" ], 
+        "names": [
             *[ "Level{}".format(x) for x in range(0, 31) ]
         ]
-    ],
+    },
 # LEVELS/MapX/StatsProgression.inibin
-    [
-        [ "PerLevelStatsFactor" ], [
+    {
+        "sections": [ "PerLevelStatsFactor" ],
+        "names": [
             *[ "Level{}".format(x) for x in range(0, 31) ]
         ]
-    ],
+    },
 # DATA/Globals/Critical.inibin
-    [
-        [ "Karma" ], [
+    {
+        "sections": [ "Karma" ], 
+        "names": [
             *[ "Critical{}".format(c) for c in range(0, 201) ]
         ]
-    ],
+    },
 # Data/Globals/Tips.inibin
 # DATA/Globals/Bounty.inibin
-    [
-        [ "ARAM", "CLASSIC", "FIRSTBLOOD", "ODIN", "TUTORIAL", "Global" ], [
+    {
+        "sections": [
+            "ARAM",
+            "CLASSIC",
+            "FIRSTBLOOD",
+            "ODIN",
+            "TUTORIAL",
+            "Global"
+        ], 
+        "names": [
             "AssistDeathstreakReduction",
             "AssistDurationOverride",
             "AssistGoldPerStreak",
@@ -104,26 +107,29 @@ all_inibin_fixlist = [
             "TimeToMinValueInSeconds",
             "TipRecievedSound",
         ]
-    ],
+    },
 # DATA/Globals/Quests.inibin
-    [
-        [ "PrimaryQuests", "SecondaryQuests" ],[
+    {
+        "sections": [ "PrimaryQuests", "SecondaryQuests" ],
+        "names": [
             "CompletedText",
             "FailedText",
             "MaxViewable",
             "RecievedText",
             "TitleText",
         ]
-    ],
-    [
-        [ "Coefficients" ],[
+    },
+    {
+        "sections": [ "Coefficients" ],
+        "names": [
             "MCoefficient",
             "NCoefficient",
         ]
-    ],
+    },
 # spells, items, talents (everything is a buff -.-)
-    [
-        [ "BuffData" ], [
+    {
+        "sections": [ "BuffData" ], 
+        "names": [
             "AlternateName",
             "ApplyMaterialOnHitSound",
             "DisplayName",
@@ -138,15 +144,17 @@ all_inibin_fixlist = [
             "ShowInTrackerUI",
             "Sound_VOEventCategory",
         ]
-    ],
+    },
 # DATA/Items/X.inibin
-    [
-        [ "Builds" ],[
+    {
+        "sections": [ "Builds" ],
+        "names": [
             *[ "Item{}".format(x) for x in range(0, 17) ]
         ]
-    ],
-    [
-        [ "Categories" ],[
+    },
+    {
+        "sections": [ "Categories" ],
+        "names": [
             "Active",
             "Armor",
             "ArmorPenetration",
@@ -177,9 +185,10 @@ all_inibin_fixlist = [
             "Trinket",
             "Vision",
         ]
-    ],
-    [
-        [ "Data" ], [
+    },
+    {
+        "sections": [ "Data" ], 
+        "names": [
             "AvatarUniqueEffect",
             "BuildDepth",
             "CanBeDropped",
@@ -351,21 +360,21 @@ all_inibin_fixlist = [
                 ]
             ],
         ]
-    ],
+    },
 # DATA/Spells/X.inibin, 
 # DATA/Shared/Spells/X.inibin, 
 # DATA/Characters/Y/Spells/X.inibin,
 # DATa/Talents/X.inibin
-    [
-        [ "SpawningUI" ],
-        [
+    {
+        "sections": [ "SpawningUI" ],
+        "names": [
             "BuffNameFilter",
             "MaxNumberOfUnits",
         ]
-    ],
-    [
-        [ "SpellData" ],
-        [
+    },
+    {
+        "sections": [ "SpellData" ],
+        "names": [
             "AfterEffectName",
             "AIBlockLevel",
             "AIEndOnly",
@@ -560,10 +569,10 @@ all_inibin_fixlist = [
             "x4",
             "x5",
         ]
-    ],
-    [
-        [ "OffsetTargeting" ],
-        [
+    },
+    {
+        "sections": [ "OffsetTargeting" ],
+        "names": [
             "OT_ArcTextureOverride",
             "OT_ArcThicknessOffset",
             "OT_AreaRadius",
@@ -589,10 +598,10 @@ all_inibin_fixlist = [
             "OT_LineTargetTextureOverride",
             "OT_LineWidth",
         ]
-    ],
-    [
-        [ "SecondaryTargeting" ],
-        [
+    },
+    {
+        "sections": [ "SecondaryTargeting" ],
+        "names": [
             "CastRadius",
             "CastRadiusTexture",
             "CastRange",
@@ -608,10 +617,10 @@ all_inibin_fixlist = [
             *[ "LocationTargettingLength{}".format(x) for x in range(1, 7) ],
             "TargettingType",
         ]
-    ],
-    [
-        [ *["SpellTargeter{}".format(x) for x in range(0, 9)] ],
-        [
+    },
+    {
+        "sections": [ *["SpellTargeter{}".format(x) for x in range(0, 9)] ],
+        "names": [
             *[ "{}{}".format(x,y) for x in [
                     "ConstraintPos",
                     "Center",
@@ -679,16 +688,18 @@ all_inibin_fixlist = [
             "WallOrientation",
             "WallRotation",
         ]
-    ],
+    },
 # DATA/Characters/X/X.inibin
 # DATA/Characters/Y/Skins/X/X.inibin
-    [
-        [ "ContextualAction" ], [
+    {
+        "sections": [ "ContextualAction" ],
+        "names": [
             "RuleConfigFile",
         ]
-    ],
-    [
-        [ "Data" ],[
+    },
+    {
+        "sections": [ "Data" ],
+        "names": [
             "AbilityPowerIncPerLevel",
             "AcquisitionRange",
             "AllowPetControl",
@@ -887,16 +898,18 @@ all_inibin_fixlist = [
             "WeaponMaterial3",
             "WeaponMaterial4",
         ]
-    ],
-    [
-        [ "DefaultAnimations" ],[
+    },
+    {
+        "sections": [ "DefaultAnimations" ],
+        "names": [
             *[ "Animation{}".format(x) for x in range(1, 10) ],
             "NumberOfAnimations",
             "Significance",
         ]
-    ],
-    [
-        [ "Evolution" ],[
+    },
+    {
+        "sections": [ "Evolution" ],
+        "names": [
             "EnabledWhileDead",
             "EvolveTitle",
             "Spell1EvolveDesc",
@@ -908,9 +921,10 @@ all_inibin_fixlist = [
             "Spell4EvolveDesc",
             "Spell4EvolveIcon",
         ]
-    ],
-    [
-        [ "HealthBar" ], [
+    },
+    {
+        "sections": [ "HealthBar" ],
+        "names": [
             "AttachToBone",
             "HPPerTick",
             "ParallaxOffset",
@@ -921,9 +935,10 @@ all_inibin_fixlist = [
             "XOffset",
             "YOffset",
         ]
-    ],
-    [
-        [ "IdleParticles" ],[
+    },
+    {
+        "sections": [ "IdleParticles" ],
+        "names": [
             "BeamParticle",
             "BeamShouldAlwayStargetEnemy",
             "BeamTargetParticle",
@@ -936,24 +951,27 @@ all_inibin_fixlist = [
             "TowerTargetingParticle2",
             "TowerTargetingParticle2Death",
         ]
-    ],
-    [
-        [ *[ "Info{}".format(x if x > 0 else "") for x in range(0, 8) ] ], [
+    },
+    {
+        "sections": [ *[ "Info{}".format(x if x > 0 else "") for x in range(0, 8) ] ],
+        "names": [
             "IconCircle",
             "IconCircleScale",
             "IconMinimap",
             "IconSquare",
         ]
-    ],
-    [
-        [ "Interaction" ], [
+    },
+    {
+        "sections": [ "Interaction" ],
+        "names": [
             "DoubleSided",
             "IdleAnim",
             "RandomizeIdleAnimPhase",
         ]
-    ],
-    [
-        [ *[ "MeshSkin{}".format(x if x > 0 else "") for x in range(0, 30) ] ], [
+    },
+    {
+        "sections": [ *[ "MeshSkin{}".format(x if x > 0 else "") for x in range(0, 30) ] ],
+        "names": [
             "Animations",
             "ArmorMaterial",
             "AttributeFlags",
@@ -1018,32 +1036,37 @@ all_inibin_fixlist = [
             "XOffset",
             "YOffset",
         ]
-    ],
-    [
-        [ "Minimap" ],[
+    },
+    {
+        "sections": [ "Minimap" ],
+        "names": [
             "MinimapIconOverride",
         ]
-    ],
-    [
-        [ "Minion" ],[
+    },
+    {
+        "sections": [ "Minion" ],
+        "names": [
             "AlwaysUpdatePAR",
             "AlwaysVisible",
             "IsTower",
         ]
-    ],
-    [
-        [ "Package" ],[
+    },
+    {
+        "sections": [ "Package" ],
+        "names": [
             "FallbackPackage",
             "FallbackINI",
         ]
-    ],
-    [
-        [ "RecItems", "TutorialRecItems" ], [
+    },
+    {
+        "sections": [ "RecItems", "TutorialRecItems" ],
+        "names": [
             *[ "RecItem{}".format(x) for x in range(1, 7) ]
         ]
-    ],
-    [
-        [ "Sounds" ], [
+    },
+    {
+        "sections": [ "Sounds" ],
+        "names": [
             "Attack1",
             "Attack2",
             "Attack3",
@@ -1061,9 +1084,10 @@ all_inibin_fixlist = [
             "Special1",
             "Special2",
         ]
-    ],
-    [
-        [ "Useable" ],[
+    },
+    {
+        "sections": [ "Useable" ],
+        "names": [
             "AllyCanUse",
             "CooldownSpellSlot",
             "EnemyCanUse",
@@ -1073,7 +1097,7 @@ all_inibin_fixlist = [
             "MinionUseable",
             "MinionUseSpell",
         ]
-    ]
+    }
 ]
 
 def add2fixdict(section, name, result = None):
@@ -1113,8 +1137,8 @@ def fixlist2fixdict(arr, result = None):
     if result == None:
         result = {}
     for sn in arr:
-        for section in sn[0]:
-            for name in sn[1]:
+        for section in sn["sections"]:
+            for name in sn["names"]:
                 add2fixdict(section, "'"+name, result)
                 add2fixdict(section, name, result)
     return result
@@ -1123,7 +1147,7 @@ all_inibin_fixdict = fixlist2fixdict(all_inibin_fixlist)
 
 # WARNING: keep inibin and troybin separate because they like to conflict
 # unhashes .inibin with dictionary
-def fix_inibin(inib, fixd = None):
+def fix(inib, fixd = None):
     if fixd == None:
         fixd = all_inibin_fixdict
     if not "Values" in inib:
@@ -1140,170 +1164,3 @@ def fix_inibin(inib, fixd = None):
                 values[section] = {}
             values[section][name] = unk[h]
             del unk[h]
-
-# Sanitize regexp's
-RE_TRUE = re.compile(r"^\s*true\s*$", re.IGNORECASE);
-RE_FALSE = re.compile(r"^\s*false\s*$", re.IGNORECASE);
-RE_NAN = re.compile(r"^/s*NaN/s*$", re.IGNORECASE);
-NAN_VALUE = float('nan')
-RE_INT = re.compile(r"^\s*[-+]?\d+\s*$", re.IGNORECASE);
-RE_DECIMAL = re.compile(r"^\s*[+-]?(?:\d+\.\d*|\d*\.\d+|\d+)(?:e[+-]?\d+)?\s*$", re.IGNORECASE);
-RE_INT_VEC = re.compile(r"^\s*(?:[-+]?\d+\s+)+(?:[-+]?\d+)\s*$", re.IGNORECASE);
-RE_DECIMAL_VEC = re.compile(r"^\s*(?:[+-]?(?:\d+\.\d*|\d*\.\d+|\d+)(?:e[+-]?\d+)?\s+)+([+-]?(?:\d+\.\d*|\d*\.\d+|\d+)(?:e[+-]?\d+)?)\s*$", re.IGNORECASE);
-
-# converts values stored in string to their right value types
-def sanitize_str(data):
-    if RE_TRUE.match(data):
-        return 1
-    elif RE_FALSE.match(data):
-        return 0
-    elif RE_NAN.match(data):
-        return NAN_VALUE
-    elif RE_INT_VEC.match(data):
-        return [int(x) for x in data.replace('\t', ' ').split(' ') if x]
-    elif RE_DECIMAL_VEC.match(data):
-        return [float(x) for x in data.replace('\t', ' ').split(' ') if x]
-    elif RE_INT.match(data):
-        return int(data)
-    elif RE_DECIMAL.match(data):
-        return float(data)
-    else:
-        return data
-    
-#Reads inibin from binary buffer to dictionary(keys and values in strings)
-#Copies results to target and returns (optional argument)
-def read_2(buffer, target):
-    def read_flags(buffer, count):
-        result = []
-        bools = buffer.read(math.ceil(count/8))
-        for index in range(0, count):
-            result.append(bool((bools[index // 8] >> (index%8))  & 1))
-        return result
-
-    def read_numbers(buffer, fmt, count = 1, mul = 1):
-        result = {}
-        num = struct.unpack("<H", buffer.read(2))[0]
-        keys = []
-        for x in range(0, num):
-            keys.append(struct.unpack("<I", buffer.read(4))[0])
-        for x in range(0, num):
-            tmp = []
-            for y in range(0, count):
-                tmp.append(struct.unpack(fmt, buffer.read(struct.calcsize(fmt)))[0] * mul)
-            result[keys[x]] = tmp[0] if count == 1 else tmp
-        return result
-
-    def read_bools(buffer):
-        result = {}
-        num = struct.unpack("<H", buffer.read(2))[0]
-        keys = []
-        for x in range(0, num):
-            keys.append(struct.unpack("<I", buffer.read(4))[0])
-        bools = read_flags(buffer, num)
-        for x in range(0, num):
-            result[keys[x]] = int(bools[x])         
-        return result
-
-    def read_strings(buffer, stringsLength):
-        result = {}
-        offsets = read_numbers(buffer, "<H")
-        data = buffer.read(stringsLength)
-        for key in offsets:
-            o = int(offsets[key])
-            t = ""
-            while data[o] != 0:
-                t = t + chr(data[o])
-                o = o + 1
-            result[key] = sanitize_str(t)
-        return result
-    stringsLength = struct.unpack("<H", buffer.read(2))[0]
-    flags = read_flags(buffer, 16)
-    read_conf = [
-        [read_numbers, ["<i"]],           #0  - 1 x int
-        [read_numbers, ["<f"]],           #1  - 1 x float 
-        [read_numbers, ["<B", 1, 0.1]],   #2  - 1 x byte * 0.1
-        [read_numbers, ["<h"]],           #3  - 1 x short
-        [read_numbers, ["<B"]],           #4  - 1 x byte 
-        [read_bools, []],                 #5  - 1 x bools 
-        [read_numbers, ["<B", 3, 0.1]],   #6  - 3 x byte * 0.1
-        [read_numbers, ["<f", 3]],        #7  - 3 x float
-        [read_numbers, ["<B", 2, 0.1]],   #8  - 2 x byte * 0.1
-        [read_numbers, ["<f", 2]],        #9  - 2 x float
-        [read_numbers, ["<B", 4, 0.1]],   #10 - 4 x byte * 0.1
-        [read_numbers, ["<f", 4]],        #11 - 4 x float
-        [read_strings, [stringsLength]],  #12 - strings
-        # TODO: are strings stored at the end of file allways??
-        #[read_numbers, ["<q"]],           #13 - long long
-    ]
-    for x in range(0, 16):
-        if flags[x]:
-            if x < len(read_conf):
-                target.update(read_conf[x][0](buffer, *(read_conf[x][1])))
-            else:
-                raise "Unknown inibin flag {} in {}!".format(x, buffer.name)
-    return target
-
-# reads version 1 .inibin
-def read_1(buffer, target):
-    buffer.read(3)
-    entryCount = struct.unpack("I", buffer.read(4))[0]
-    dataCount = struct.unpack("I", buffer.read(4))[0]
-    offsets = {}
-    for i in range(0, entryCount):
-        h = struct.unpack("I", buffer.read(4))[0]
-        o = struct.unpack("I", buffer.read(4))[0]
-        offsets[h] = o
-    data = buffer.read(dataCount)
-    result = {}
-    for key in offsets:
-        o = int(offsets[key])
-        t = ""
-        while data[o] != 0:
-            t = t + chr(data[o])
-            o = o + 1
-        result[key] = sanitize_str(t)
-    target.update(result)
-    return target
-
-# reads .inibin from bianry buffer with auto-detecting version
-def read(buffer, result = None):
-    if result == None:
-        result = {
-            "Values": {},
-            "UNKNOWN_HASHES": {}
-        }
-    else:
-        if not "Values" in result:
-            result["Values"] = {}
-        if not "UNKNOWN_HASHES" in result:
-            result["UNKNOWN_HASHES"] = {}
-    target = result["UNKNOWN_HASHES"]
-    version = struct.unpack("B", buffer.read(1))[0]
-    if version == 2:
-        read_2(buffer, target)
-    elif version == 1:
-        read_1(buffer, target)
-    else:
-        raise "Unknow version!"
-    return result
-    
-# reads .inibin from binary file on filesystem
-def from_file(name, result = None):
-    return read(open(name, "rb"), result)
-
-# gets entry in .ini/.inibin
-def get(target, section, name, default = None):
-    if section in target["Values"] and name in target["Values"][section]:
-        return target["Values"][section][name]
-    else:
-        h = ihash(section, name)
-        return target["UNKNOWN_HASHES"][h] if h in target["UNKNOWN_HASHES"] else default
-
-def load_json(name):
-    with open(name, 'r') as inf:
-        return json.load(inf)
-def save_json(name, j):
-    with open(name, 'w') as outf:
-        outf.write(json.dumps(j, indent=2, sort_keys=True))
-def to_json(target):
-    return json.dumps(target, indent=2)

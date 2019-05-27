@@ -2,7 +2,6 @@ import struct
 import io
 import re
 import os
-import json
 
 def read(buffer):
     def readx(count):
@@ -135,8 +134,6 @@ def read(buffer):
     }
 
 def from_file(name):
-    file = open(name, 'rb')
-    return read(file)
+    with open(name, 'rb') as file:
+        return read(file)
 
-def to_json(p):
-    return json.dumps(p, indent=2)
