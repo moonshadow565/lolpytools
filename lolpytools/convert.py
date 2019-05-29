@@ -1,6 +1,7 @@
 #!/bin/env python
 from . import inibin
 from . import inibin_fix
+from . import plua
 
 def inibin2ini(infile, outfile):
     ibin = inibin.read(infile)
@@ -21,3 +22,7 @@ def inibin2ini(infile, outfile):
         outfile.write('\n')
     for name, value in sorted(ibin["UNKNOWN_HASHES"].items()):
         write_value(";UNKNOWN_HASH {}".format(name), value)
+
+def luaobj2lua(infile, outfile):
+    plua.read(infile)
+    

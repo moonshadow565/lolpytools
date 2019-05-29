@@ -9,12 +9,14 @@ all_gamemodes = [
     "CLASSIC",
     "FIRSTBLOOD",
     "ODIN",
+    "ONEFORALL",
     "TUTORIAL",
     "ASCENSION",
     "URF",
 ]
 all_mutators = [
     *all_gamemodes,
+    "NightmareBots",
 ]
 
 all_inibin_fixlist = [
@@ -117,6 +119,15 @@ all_inibin_fixlist = [
             *[ "Level{}".format(x) for x in range(0, 31) ]
         ]
     },
+# DATA/Globals/ABGroups.inibin
+    {
+        "sections": [
+            "Settings",
+        ],
+        "names": [
+            "EnabledGroups",
+        ],
+    },
 # DATA/Globals/Critical.inibin
     {
         "sections": [ "Karma" ], 
@@ -125,6 +136,35 @@ all_inibin_fixlist = [
         ]
     },
 # Data/Globals/Tips.inibin
+    {
+        "sections": [
+            "Global",
+            *all_gamemodes
+        ], 
+        "names": [
+            "MaxViewable",
+        ],
+    },
+    {
+        "sections": [
+            "Global",
+        ], 
+        "names": [
+            "DialogueClosedSound",
+            "DialogueOpenedSound",
+            "MaxViewable",
+            "TipRecievedSound",
+        ],
+    },
+# DATA/Globals/GameMutatorExpansions.inibin
+    {
+        "sections": [
+            *all_mutators
+        ],
+        "names": [
+            *[ "Mutator{}".format(x) for x in range(0, 10) ],
+        ],
+    },
 # DATA/Globals/Bounty.inibin
     {
         "sections": [
@@ -142,17 +182,14 @@ all_inibin_fixlist = [
             "AssistPoolMin",
             "AssistPoolMinValueTime",
             "AssistStreakBonus",
-            "AssistStreakMin"
+            "AssistStreakMin",
             "BaseGold",
             "BountyRoundDownIncrement",
             "DeathStreakPenalty",
-            "DialogueClosedSound",
-            "DialogueOpenedSound",
             "FirstBloodBonus",
             "GoldPoolForAssist",
             "KillStreakBonus",
             "MaxKillStreakBonus",
-            "MaxViewable",
             "MinAssistsForStreak",
             "MinDeathsForStreak",
             "MinDeathStreakPenalty",
@@ -164,13 +201,129 @@ all_inibin_fixlist = [
             "TimeBasedMinValuePercent",
             "TimeToMaxValueInSeconds",
             "TimeToMinValueInSeconds",
-            "TipRecievedSound",
         ]
+    },
+# DATA/Globals/*_Stats.inibin
+    {
+        "sections": [
+            "HeroStats",
+        ],
+        "names": [
+            "ID",
+            "NAME",
+            "SKIN",
+            "TEAM",
+            "WIN",
+            "EXP",
+            "LEVEL",
+            "GOLD_SPENT",
+            "GOLD_EARNED",
+            "NUM_DEATHS",
+            "CHAMPIONS_KILLED",
+            "ASSISTS",
+            "BARRACKS_KILLED",
+            "TURRETS_KILLED",
+            "HQ_KILLED",
+            "MINIONS_KILLED",
+            "NEUTRAL_MINIONS_KILLED",
+            "SUPER_MONSTER_KILLED",
+            "LARGEST_KILLING_SPREE",
+            "KILLING_SPREES",
+            "LARGEST_MULTI_KILL",
+            "TOTAL_DAMAGE_DEALT",
+            "PHYSICAL_DAMAGE_DEALT_PLAYER",
+            "MAGIC_DAMAGE_DEALT_PLAYER",
+            "TOTAL_DAMAGE_DEALT_TO_CHAMPIONS",
+            "PHYSICAL_DAMAGE_DEALT_TO_CHAMPIONS",
+            "MAGIC_DAMAGE_DEALT_TO_CHAMPIONS",
+            "TOTAL_DAMAGE_TAKEN",
+            "PHYSICAL_DAMAGE_TAKEN",
+            "MAGIC_DAMAGE_TAKEN",
+            "DOUBLE_KILLS",
+            "TRIPLE_KILLS",
+            "QUADRA_KILLS",
+            "PENTA_KILLS",
+            "UNREAL_KILLS",
+            "ITEMS_PURCHASED",
+            "CONSUMABLES_PURCHASED",
+            "SPELL1_CAST",
+            "SPELL2_CAST",
+            "SPELL3_CAST",
+            "SPELL4_CAST",
+            "SUMMON_SPELL1_CAST",
+            "SUMMON_SPELL2_CAST",
+            "LARGEST_CRITICAL_STRIKE",
+            "TIME_PLAYED",
+            "LONGEST_TIME_SPENT_LIVING",
+            "TOTAL_TIME_SPENT_DEAD",
+            "TOTAL_HEAL",
+            "TOTAL_UNITS_HEALED",
+            "FRIENDLY_TURRET_LOST",
+            "FRIENDLY_DAMPEN_LOST",
+            "FRIENDLY_HQ_LOST",
+            "TOOK_FIRST_BLOOD",
+            "WAS_AFK",
+            "WAS_AFK_AFTER_FAILED_SURRENDER",
+            "TIME_OF_FROM_LAST_DISCONNECT",
+            "TIME_SPENT_DISCONNECTED",
+            "NEVER_ENTERED_GAME",
+            "TEAMMATE_NEVER_ENTERED_GAME",
+            "ITEM0",
+            "ITEM1",
+            "ITEM2",
+            "ITEM3",
+            "ITEM4",
+            "ITEM5",
+            "ITEM6",
+            "SIGHT_WARDS_BOUGHT_IN_GAME",
+            "VISION_WARDS_BOUGHT_IN_GAME",
+            "NODE_CAPTURE",
+            "NODE_NEUTRALIZE",
+            "NODE_KILL_OFFENSE",
+            "TEAM_OBJECTIVE",
+            "DEFEND_POINT_NEUTRALIZE",
+            "NODE_KILL_DEFENSE",
+            "NODE_TIME_DEFENSE",
+            "LAST_STAND",
+            "NODE_CAPTURE_ASSIST",
+            "NODE_NEUTRALIZE_ASSIST",
+            "TOTAL_PLAYER_SCORE",
+            "OFFENSE_PLAYER_SCORE",
+            "DEFENSE_PLAYER_SCORE",
+            "COMBAT_PLAYER_SCORE",
+            "OBJECTIVE_PLAYER_SCORE",
+            "VICTORY_POINT_TOTAL",
+            "TOTAL_SCORE_RANK",
+            "PING",
+            "TRUE_DAMAGE_DEALT_PLAYER",
+            "TRUE_DAMAGE_TAKEN",
+            "TRUE_DAMAGE_DEALT_TO_CHAMPIONS",
+            "WARD_PLACED",
+            "WARD_KILLED",
+            "TOTAL_TIME_CROWD_CONTROL_DEALT",
+            "NEUTRAL_MINIONS_KILLED",
+            "NEUTRAL_MINIONS_KILLED_YOUR_JUNGLE",
+            "NEUTRAL_MINIONS_KILLED_ENEMY_JUNGLE",
+        ],
     },
 # DATA/Globals/Quests.inibin
     {
-        "sections": [ "PrimaryQuests", "SecondaryQuests" ],
+        "sections": [
+            "PrimaryQuests", 
+            "SecondaryQuests", 
+            "Objectives",
+        ],
         "names": [
+            *[ "{}{}".format(x, y) for x in [
+                    "RecievedSound",
+                    "CompletedSound",
+                    "FailedSound",
+                ] for y in [
+                    "Effect",
+                    "VO_ID",
+                    "VO_Folder",
+                ]
+            ],
             "CompletedText",
             "FailedText",
             "MaxViewable",
@@ -184,6 +337,17 @@ all_inibin_fixlist = [
             "MCoefficient",
             "NCoefficient",
         ]
+    },
+# DATA/Characters/HeroSpawnOffsets.inibin
+    {
+        "sections": [
+            * [ "Chaos{}".format(x) for x in range(1, 7) ],
+            * [ "Order{}".format(x) for x in range(1, 7) ],
+        ],
+        "names": [
+            * [ "Pos{}".format(x) for x in range(1, 7) ],
+            * [ "Facing{}".format(x) for x in range(1, 7) ],
+        ],
     },
 # spells, items, talents (everything is a buff -.-)
     {
@@ -204,6 +368,8 @@ all_inibin_fixlist = [
             "Sound_VOEventCategory",
         ]
     },
+# DATA/Items/metadadata/categories.inibin
+# DATA/Items/ItemGroups/*.inibin
 # DATA/Items/X.inibin
     {
         "sections": [ "Builds" ],
@@ -286,8 +452,6 @@ all_inibin_fixlist = [
             "FlatMagicReduction",
             "FlatMissChanceMod",
             "FlatMovementSpeedMod",
-            "FlatMPPoolMod",
-            "FlatMPRegenMod",
             "FlatPhysicalDamageMod",
             "FlatPhysicalReduction",
             "FlatSpellBlockMod",
@@ -333,8 +497,6 @@ all_inibin_fixlist = [
             "PercentMagicPenetrationMod",
             "PercentMagicReduction",
             "PercentMovementSpeedMod",
-            "PercentMPPoolMod",
-            "PercentMPRegenMod",
             "PercentMultiplicativeAttackSpeedMod",
             "PercentMultiplicativeMovementSpeedMod",
             "PercentPhysicalDamageMod",
@@ -371,8 +533,6 @@ all_inibin_fixlist = [
             "rFlatMagicPenetrationMod",
             "rFlatMagicPenetrationModPerLevel",
             "rFlatMovementSpeedModPerLevel",
-            "rFlatMPModPerLevel",
-            "rFlatMPRegenModPerLevel",
             "rFlatPhysicalDamageModPerLevel",
             "rFlatSpellBlockModPerLevel",
             "rFlatTimeDeadMod",
@@ -404,12 +564,14 @@ all_inibin_fixlist = [
                     "rFlat{}ModPerLevel",
                     "rFlat{}RegenModPerLevel",
                 ] for par in [
-                    "Mana",
+                    "None",
+                    "MP",
                     "Energy",
                     "None",
                     "Shield",
                     "BattleFury",
                     "DragonFury",
+                    "GnarFury",
                     "Rage",
                     "Heat",
                     "Ferocity",
@@ -836,7 +998,7 @@ all_inibin_fixlist = [
                     "{}{}_Probability",
                 ] for x in range(0, 10)
             ],
-            *[ "ExtraSpell{}".format(x) for x in range(0, 16) ],
+            *[ "ExtraSpell{}".format(x) for x in range(0, 17) ],
             "FireworksEnabled",
             "FriendlyTooltip",
             "GameplayCollisionRadius",
@@ -889,25 +1051,10 @@ all_inibin_fixlist = [
             *[ p.format(x) for x in range(1, 7) for p in [
                     "Passive{}",
                     "Passive{}Desc",
-                    "PassLev{}Desc1",
-                    "PassLev{}Desc2",
-                    "PassLev{}Desc3",
-                    "PassLev{}Desc4",
-                    "PassLev{}Desc5",
-                    "PassLev{}Desc6",
+                    *[ "PassLev{{}}Desc{}".format(x) for x in range(0,7) ],
                     "Passive{}Icon",
-                    "Passive{}Level1",
-                    "Passive{}Level2",
-                    "Passive{}Level3",
-                    "Passive{}Level4",
-                    "Passive{}Level5",
-                    "Passive{}Level6",
-                    "Passive{}Effect1",
-                    "Passive{}Effect2",
-                    "Passive{}Effect3",
-                    "Passive{}Effect4",
-                    "Passive{}Effect5",
-                    "Passive{}Effect6",
+                    *[ "Passive{{}}Level{}".format(x) for x in range(0,7) ],
+                    *[ "Passive{{}}Effect{}".format(x) for x in range(0,7) ],
                     "Passive{}LuaName",
                     "Passive{}Name",
                     "Passive{}NumEffects",
@@ -1120,7 +1267,7 @@ all_inibin_fixlist = [
     {
         "sections": [ "RecItems", "TutorialRecItems" ],
         "names": [
-            *[ "RecItem{}".format(x) for x in range(1, 7) ]
+            *[ "RecItem{}".format(x) for x in range(1, 7) ],
         ]
     },
     {
@@ -1159,9 +1306,7 @@ all_inibin_fixlist = [
     }
 ]
 
-def add2fixdict(section, name, result = None):
-    if result == None:
-        result = {}
+def add2fixdict(section, name, result):
     h = ihash(section, name)
     if h in result:
         old = result[h]
@@ -1169,7 +1314,6 @@ def add2fixdict(section, name, result = None):
             stderr.write("Collision {} {}*{} with {}*{}!\n".format(h, section, name, old[0], old[1]))
     else:
         result[h] = [section, name]
-    return result
 
 def fixlist2fixdict(arr, result = None):
     if result == None:

@@ -100,14 +100,13 @@ def read(buffer):
             table = R(a)[0]
             index = RK(b)[0]
             value = RK(c)[0]
-            if isinstance(index, str):
-                table = table[0]
             table[index] = value
         #10 NEWTABLE Create a new table
         elif op == 10:
             n = F8(b)
             m = F8(c)
-            value = [{}] + [None for x in range(0, n)]
+            # value = { x : None for x in range(1, n) }
+            value = {}
             R(a)[0] = value
         #28 CALL Call a closure
         elif op == 28:
