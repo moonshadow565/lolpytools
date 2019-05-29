@@ -2,6 +2,7 @@
 from . import inibin
 from . import inibin_fix
 from . import plua
+import json
 
 def inibin2ini(infile, outfile):
     ibin = inibin.read(infile)
@@ -24,5 +25,49 @@ def inibin2ini(infile, outfile):
         write_value(";UNKNOWN_HASH {}".format(name), value)
 
 def luaobj2lua(infile, outfile):
-    plua.read(infile)
+    g = plua.read(infile)["Values"]
     
+    def verify_array(value):
+        sz = len(value) + 1
+        if 0 in value:
+            return False
+        for i in range(1, sz):
+            if not i in value:
+                return False
+        return True
+    
+    def write_value(value, indent = 0):
+        if value is None:
+            outfile.write("nil")
+        elif isinstance(value, str):
+            outfile.write(json.dumps(value))
+        elif isinstance(value, int):
+            outfile.write(str(value))
+        elif isinstance(value, float):
+            outfile.write(str(value))
+        elif isinstance(value, bool):
+            outfile.write("True" if value else "False")
+        elif isinstance(value, dict):
+            if len(value) == 0:
+                outfile.write("{}")
+            else:
+                outfile.write("{\n")
+                isarray = verify_array(value)
+                for tkey, tvalue in sorted(value.items()):
+                    outfile.write(" " * ((indent + 1) * 4))
+                    if not isarray:
+                        outfile.write("[")
+                        write_value(tkey, indent + 1)
+                        outfile.write("] = ")
+                    write_value(tvalue, indent + 1)
+                    outfile.write(",\n")
+                outfile.write(" " * (indent * 4))
+                outfile.write("}")
+            pass
+        else:
+            raise Exception("Unknown type: {}".format(type(value))) 
+    for gname, gvalue in sorted(g.items()):
+        outfile.write("{} = ".format(gname))
+        write_value(gvalue, 0)
+        outfile.write("\n")
+        
