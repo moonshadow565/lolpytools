@@ -1,8 +1,25 @@
 #!/usr/bin/env python
-from .inibin import ihash
 from sys import stderr
 
-# Note: rito likes to use ' and * prefixes to "comment out" stuff
+def ihash(section, name):
+    ret = 0
+    for c in section + '*' + name:
+        ret = (ord(c.lower()) +((65599 * ret) & 0xffffffff)) & 0xffffffff
+    return ret
+
+def ihash_s(sections):
+    for section in sections:
+        ret = 0
+        for c in section:
+            ret = (ord(c.lower()) +((65599 * ret) & 0xffffffff)) & 0xffffffff
+        yield section, ret
+
+def ihash_n(sh, names):
+    for name in names:
+        ret = (ord('*') +((65599 * sh) & 0xffffffff)) & 0xffffffff
+        for c in name:
+            ret = (ord(c.lower()) +((65599 * ret) & 0xffffffff)) & 0xffffffff
+        yield name, ret
 
 all_gamemodes = [
     "ARAM",
@@ -1306,30 +1323,16 @@ all_inibin_fixlist = [
     }
 ]
 
-def add2fixdict(section, name, result):
-    h = ihash(section, name)
-    if h in result:
-        old = result[h]
-        if old[0].lower() != section.lower() or old[1].lower() != name.lower():
-            stderr.write("Collision {} {}*{} with {}*{}!\n".format(h, section, name, old[0], old[1]))
-    else:
-        result[h] = [section, name]
-
-def fixlist2fixdict(arr, result = None):
-    if result == None:
-        result = {}
-    for sn in arr:
-        for section in sn["sections"]:
-            for name in sn["names"]:
-                add2fixdict(section, "'"+name, result)
-                add2fixdict(section, name, result)
-    return result
-all_inibin_fixdict = fixlist2fixdict(all_inibin_fixlist)
+all_inibin_fixdict = {
+    h: (s, n) \
+        for sn in all_inibin_fixlist \
+        for s,sh in ihash_s(sn["sections"]) \
+        for n,h in ihash_n(sh, sn["names"])
+}
 
 # unhashes .inibin with dictionary
 def fix(inib, fixd = None):
-    if fixd == None:
-        fixd = all_inibin_fixdict
+    fixd = all_inibin_fixdict
     if not "Values" in inib:
         inib["Values"] = {}
     if not "UNKNOWN_HASHES" in inib:

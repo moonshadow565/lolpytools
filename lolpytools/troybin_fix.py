@@ -319,24 +319,24 @@ group_names = (
 )
 
 fluid_names = (
-    "f-viscosity",
-    "f-diffusion",
     "f-accel",
     "f-buoyancy",
-    "f-dissipation",
-    "f-startkick",
     "f-denseforce",
+    "f-diffusion",
+    "f-dissipation",
+    "f-life",
+    "f-initdensity",
     "f-movement-x",
     "f-movement-y",
-    "f-initdensity",
-    "f-life",
+    "f-viscosity",
+    "f-startkick",
     "f-rate",
     "f-rendersize",
     *( jet % x for jet in (
-            "f-jetpos%u",
             "f-jetdir%u",
-            "f-jetspeed%u",
             "f-jetdirdiff%u",
+            "f-jetpos%u",
+            "f-jetspeed%u",
         ) for x in range(0, 4)
     ),
 )
