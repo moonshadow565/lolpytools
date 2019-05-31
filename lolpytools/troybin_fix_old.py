@@ -1,49 +1,41 @@
 #!/usr/bin/env python
 from .inibin import ihash
 from sys import stderr
-from .inibin_fix import fixlist2fixdict
-from .inibin_fix import fix as fix_with_lookup
 
 system_fixlist = [
-    {
-        "sections": [ "System" ],
-        "names": [
-            "AudioFlexValueParameterName",
-            "AudioParameterFlexID",
-            "build-up-time",
-            "group-vis",
-            "group-scale-cap",
-            "KeepOrientationAfterSpellCast",
-            *[ mat.format(x) for x in range(0,5) for mat in [
-                    "MaterialOverride{}BlendMode",
-                    "MaterialOverride{}GlossTexture",
-                    "MaterialOverride{}EmissiveTexture",
-                    "MaterialOverride{}FixedAlphaScrolling",
-                    "MaterialOverride{}Priority",
-                    "MaterialOverride{}RenderingMode",
-                    "MaterialOverride{}SubMesh",
-                    "MaterialOverride{}Texture",
-                    "MaterialOverride{}UVScroll",
-                ]
-            ],
-            "MaterialOverrideTransMap",
-            "MaterialOverrideTransSource",
-            "PersistThruDeath",
-            "PersistThruRevive",
-            "SelfIllumination",
-            "SimulateEveryFrame",
-            "SimulateOncePerFrame",
-            "SimulateWhileOffScreen",
-            "SoundEndsOnEmitterEnd",
-            "SoundOnCreate",
-            "SoundPersistent",
-            "SoundsPlayWhileOffScreen",
-            "VoiceOverOnCreate",
-            "VoiceOverPersistent",
+    "AudioFlexValueParameterName",
+    "AudioParameterFlexID",
+    "build-up-time",
+    "group-vis",
+    "group-scale-cap",
+    "KeepOrientationAfterSpellCast",
+    *[ mat.format(x) for x in range(0,5) for mat in [
+            "MaterialOverride{}BlendMode",
+            "MaterialOverride{}GlossTexture",
+            "MaterialOverride{}EmissiveTexture",
+            "MaterialOverride{}FixedAlphaScrolling",
+            "MaterialOverride{}Priority",
+            "MaterialOverride{}RenderingMode",
+            "MaterialOverride{}SubMesh",
+            "MaterialOverride{}Texture",
+            "MaterialOverride{}UVScroll",
         ]
-    },
+    ],
+    "MaterialOverrideTransMap",
+    "MaterialOverrideTransSource",
+    "PersistThruDeath",
+    "PersistThruRevive",
+    "SelfIllumination",
+    "SimulateEveryFrame",
+    "SimulateOncePerFrame",
+    "SimulateWhileOffScreen",
+    "SoundEndsOnEmitterEnd",
+    "SoundOnCreate",
+    "SoundPersistent",
+    "SoundsPlayWhileOffScreen",
+    "VoiceOverOnCreate",
+    "VoiceOverPersistent",
 ]
-system_fixdict = fixlist2fixdict(system_fixlist)
 
 # TODO: impl Riot::ParticleSystem::AnimatedVariableWithRandomFactor<T>
 
@@ -533,10 +525,9 @@ def fix_part(tbin, part, index, iscommented = False):
         fix_complex(tbin, part)
 
 def fix(tbin):
-    fix_with_lookup(tbin, system_fixdict)
-    parts = []
+    for name in system_fixlist:
+        get(tbin, "System", name)
     index = 1
-    
     fix_part(tbin, "System", 0, True)
     while True:
         get(tbin, "System", "GroupPart%dImportance" % index, "Medium")

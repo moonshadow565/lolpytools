@@ -1,25 +1,20 @@
 #!/usr/bin/env python
 from sys import stderr
+COMMENTS=("%s", "'%s")
 
-def ihash(section, name):
-    ret = 0
-    for c in section + '*' + name:
+def ihash(value, ret = 0):
+    for c in value:
         ret = (ord(c.lower()) +((65599 * ret) & 0xffffffff)) & 0xffffffff
     return ret
 
-def ihash_s(sections):
+def a_ihash(sections, names):
     for section in sections:
-        ret = 0
-        for c in section:
-            ret = (ord(c.lower()) +((65599 * ret) & 0xffffffff)) & 0xffffffff
-        yield section, ret
-
-def ihash_n(sh, names):
-    for name in names:
-        ret = (ord('*') +((65599 * sh) & 0xffffffff)) & 0xffffffff
-        for c in name:
-            ret = (ord(c.lower()) +((65599 * ret) & 0xffffffff)) & 0xffffffff
-        yield name, ret
+        sectionhash = ihash('*', ihash(section))
+        for rawname in names:
+            for com in COMMENTS:
+                name = com % rawname
+                ret = ihash(name, sectionhash)
+                yield section, name, ret
 
 all_gamemodes = [
     "ARAM",
@@ -38,57 +33,57 @@ all_mutators = [
 
 all_inibin_fixlist = [
 # LEVELS/MapX/DeathTimes.inibin
-    {
-        "sections": [ "DeathTimeScaling" ],
-        "names": [
+    [
+        [ "DeathTimeScaling" ],
+        [
             "IncrementTime",
             "PercentCap",
             "PercentIncrease",
             "StartTime",
         ]
-    },
-    {
-        "sections": [ "DeathTimeSettings" ], 
-        "names": [
+    ],
+    [
+        [ "DeathTimeSettings" ], 
+        [
             "AllowDeathTimeMods",
             "StartDeathTimerForZombies",
         ]
-    },
-    {
-        "sections": [ "DeathWaveRespawn" ], 
-        "names": [
+    ],
+    [
+        [ "DeathWaveRespawn" ], 
+        [
             "WaveRespawnInterval",
         ]
-    },
-    {
-        "sections": [ "ExpGrantedOnDeath" ], 
-        "names": [
+    ],
+    [
+        [ "ExpGrantedOnDeath" ], 
+        [
             "BaseExpMultiple",
             "LevelDifferenceExpMultiple",
             "MinimumExpMultiple",
         ]
-    },
-    {
-        "sections": [ "TimeDeadPerLevel", "TimeDeadPerLevelTutorial" ],
-        "names": [
+    ],
+    [
+        [ "TimeDeadPerLevel", "TimeDeadPerLevelTutorial" ],
+        [
             *[ "Level{:02}".format(x) for x in range(0, 31) ]
         ]  
-    },
+    ],
 # LEVELS/MapX/Items.inibin
-    {
-        "sections":[ 
+    [
+        [ 
             "ItemInclusionList",
             "UnpurchasableItemList",
             *[ "UnpurchasableItemList_{}".format(x) for x in all_mutators ],
         ],
-        "names":[
+        [
             *[ "Item{}".format(x) for x in range(0, 200) ]
         ]
-    },
+    ],
 # LEVELS/MapX/NeutralTimers.inibin
-    {
-        "sections": [ "General" ],
-        "names": [ 
+    [
+        [ "General" ],
+        [ 
             *[ "Element{}".format(x) for x in range(0, 10) ],
             *[ "Element{}_{}".format(x, y) for x in range(0, 10) for y in [
                     "Default",
@@ -102,12 +97,12 @@ all_inibin_fixlist = [
             "TimerTooltip",
             "TimerWarningThreshold",
         ],
-    },
-    {
-        "sections": [
+    ],
+    [
+        [
             *[ "Timer{}".format(x) for x in range(0, 10) ]
         ],
-        "names": [
+        [
             "HudHandleText",
             "HudHandleIcon",
             *[ "HudHandleIcon_{}".format(x) for x in [
@@ -121,74 +116,74 @@ all_inibin_fixlist = [
             "TooltipRespawn",
             "TimerWarningThreshold",
         ]
-    },
+    ],
 # LEVELS/MapX/ExpCurve.inibin
-    {
-        "sections": [ "EXP", "EXPTutorial" ], 
-        "names": [
+    [
+        [ "EXP", "EXPTutorial" ], 
+        [
             *[ "Level{}".format(x) for x in range(0, 31) ]
         ]
-    },
+    ],
 # LEVELS/MapX/StatsProgression.inibin
-    {
-        "sections": [ "PerLevelStatsFactor" ],
-        "names": [
+    [
+        [ "PerLevelStatsFactor" ],
+        [
             *[ "Level{}".format(x) for x in range(0, 31) ]
         ]
-    },
+    ],
 # DATA/Globals/ABGroups.inibin
-    {
-        "sections": [
+    [
+        [
             "Settings",
         ],
-        "names": [
+        [
             "EnabledGroups",
         ],
-    },
+    ],
 # DATA/Globals/Critical.inibin
-    {
-        "sections": [ "Karma" ], 
-        "names": [
+    [
+        [ "Karma" ], 
+        [
             *[ "Critical{}".format(c) for c in range(0, 201) ]
         ]
-    },
+    ],
 # Data/Globals/Tips.inibin
-    {
-        "sections": [
+    [
+        [
             "Global",
             *all_gamemodes
         ], 
-        "names": [
+        [
             "MaxViewable",
         ],
-    },
-    {
-        "sections": [
+    ],
+    [
+        [
             "Global",
         ], 
-        "names": [
+        [
             "DialogueClosedSound",
             "DialogueOpenedSound",
             "MaxViewable",
             "TipRecievedSound",
         ],
-    },
+    ],
 # DATA/Globals/GameMutatorExpansions.inibin
-    {
-        "sections": [
+    [
+        [
             *all_mutators
         ],
-        "names": [
+        [
             *[ "Mutator{}".format(x) for x in range(0, 10) ],
         ],
-    },
+    ],
 # DATA/Globals/Bounty.inibin
-    {
-        "sections": [
+    [
+        [
             "Global",
             *all_gamemodes
         ], 
-        "names": [
+        [
             "AssistDeathstreakReduction",
             "AssistDurationOverride",
             "AssistGoldPerStreak",
@@ -219,13 +214,13 @@ all_inibin_fixlist = [
             "TimeToMaxValueInSeconds",
             "TimeToMinValueInSeconds",
         ]
-    },
+    ],
 # DATA/Globals/*_Stats.inibin
-    {
-        "sections": [
+    [
+        [
             "HeroStats",
         ],
-        "names": [
+        [
             "ID",
             "NAME",
             "SKIN",
@@ -322,15 +317,15 @@ all_inibin_fixlist = [
             "NEUTRAL_MINIONS_KILLED_YOUR_JUNGLE",
             "NEUTRAL_MINIONS_KILLED_ENEMY_JUNGLE",
         ],
-    },
+    ],
 # DATA/Globals/Quests.inibin
-    {
-        "sections": [
+    [
+        [
             "PrimaryQuests", 
             "SecondaryQuests", 
             "Objectives",
         ],
-        "names": [
+        [
             *[ "{}{}".format(x, y) for x in [
                     "RecievedSound",
                     "CompletedSound",
@@ -347,29 +342,29 @@ all_inibin_fixlist = [
             "RecievedText",
             "TitleText",
         ]
-    },
-    {
-        "sections": [ "Coefficients" ],
-        "names": [
+    ],
+    [
+        [ "Coefficients" ],
+        [
             "MCoefficient",
             "NCoefficient",
         ]
-    },
+    ],
 # DATA/Characters/HeroSpawnOffsets.inibin
-    {
-        "sections": [
+    [
+        [
             * [ "Chaos{}".format(x) for x in range(1, 7) ],
             * [ "Order{}".format(x) for x in range(1, 7) ],
         ],
-        "names": [
+        [
             * [ "Pos{}".format(x) for x in range(1, 7) ],
             * [ "Facing{}".format(x) for x in range(1, 7) ],
         ],
-    },
+    ],
 # spells, items, talents (everything is a buff -.-)
-    {
-        "sections": [ "BuffData" ], 
-        "names": [
+    [
+        [ "BuffData" ], 
+        [
             "AlternateName",
             "ApplyMaterialOnHitSound",
             "DisplayName",
@@ -384,19 +379,19 @@ all_inibin_fixlist = [
             "ShowInTrackerUI",
             "Sound_VOEventCategory",
         ]
-    },
+    ],
 # DATA/Items/metadadata/categories.inibin
 # DATA/Items/ItemGroups/*.inibin
 # DATA/Items/X.inibin
-    {
-        "sections": [ "Builds" ],
-        "names": [
+    [
+        [ "Builds" ],
+        [
             *[ "Item{}".format(x) for x in range(0, 17) ]
         ]
-    },
-    {
-        "sections": [ "Categories" ],
-        "names": [
+    ],
+    [
+        [ "Categories" ],
+        [
             "Active",
             "Armor",
             "ArmorPenetration",
@@ -427,10 +422,10 @@ all_inibin_fixlist = [
             "Trinket",
             "Vision",
         ]
-    },
-    {
-        "sections": [ "Data" ], 
-        "names": [
+    ],
+    [
+        [ "Data" ], 
+        [
             "AvatarUniqueEffect",
             "BuildDepth",
             "CanBeDropped",
@@ -598,21 +593,21 @@ all_inibin_fixlist = [
                 ]
             ],
         ]
-    },
+    ],
 # DATA/Spells/X.inibin, 
 # DATA/Shared/Spells/X.inibin, 
 # DATA/Characters/Y/Spells/X.inibin,
 # DATa/Talents/X.inibin
-    {
-        "sections": [ "SpawningUI" ],
-        "names": [
+    [
+        [ "SpawningUI" ],
+        [
             "BuffNameFilter",
             "MaxNumberOfUnits",
         ]
-    },
-    {
-        "sections": [ "SpellData" ],
-        "names": [
+    ],
+    [
+        [ "SpellData" ],
+        [
             "AfterEffectName",
             "AIBlockLevel",
             "AIEndOnly",
@@ -807,10 +802,10 @@ all_inibin_fixlist = [
             "x4",
             "x5",
         ]
-    },
-    {
-        "sections": [ "OffsetTargeting" ],
-        "names": [
+    ],
+    [
+        [ "OffsetTargeting" ],
+        [
             "OT_ArcTextureOverride",
             "OT_ArcThicknessOffset",
             "OT_AreaRadius",
@@ -836,10 +831,10 @@ all_inibin_fixlist = [
             "OT_LineTargetTextureOverride",
             "OT_LineWidth",
         ]
-    },
-    {
-        "sections": [ "SecondaryTargeting" ],
-        "names": [
+    ],
+    [
+        [ "SecondaryTargeting" ],
+        [
             "CastRadius",
             "CastRadiusTexture",
             "CastRange",
@@ -855,10 +850,10 @@ all_inibin_fixlist = [
             *[ "LocationTargettingLength{}".format(x) for x in range(1, 7) ],
             "TargettingType",
         ]
-    },
-    {
-        "sections": [ *["SpellTargeter{}".format(x) for x in range(0, 9)] ],
-        "names": [
+    ],
+    [
+        [ *["SpellTargeter{}".format(x) for x in range(0, 9)] ],
+        [
             *[ "{}{}".format(x,y) for x in [
                     "ConstraintPos",
                     "Center",
@@ -926,18 +921,18 @@ all_inibin_fixlist = [
             "WallOrientation",
             "WallRotation",
         ]
-    },
+    ],
 # DATA/Characters/X/X.inibin
 # DATA/Characters/Y/Skins/X/X.inibin
-    {
-        "sections": [ "ContextualAction" ],
-        "names": [
+    [
+        [ "ContextualAction" ],
+        [
             "RuleConfigFile",
         ]
-    },
-    {
-        "sections": [ "Data" ],
-        "names": [
+    ],
+    [
+        [ "Data" ],
+        [
             "AbilityPowerIncPerLevel",
             "AcquisitionRange",
             "AllowPetControl",
@@ -1121,18 +1116,18 @@ all_inibin_fixlist = [
             "WeaponMaterial3",
             "WeaponMaterial4",
         ]
-    },
-    {
-        "sections": [ "DefaultAnimations" ],
-        "names": [
+    ],
+    [
+        [ "DefaultAnimations" ],
+        [
             *[ "Animation{}".format(x) for x in range(1, 10) ],
             "NumberOfAnimations",
             "Significance",
         ]
-    },
-    {
-        "sections": [ "Evolution" ],
-        "names": [
+    ],
+    [
+        [ "Evolution" ],
+        [
             "EnabledWhileDead",
             "EvolveTitle",
             "Spell1EvolveDesc",
@@ -1144,10 +1139,10 @@ all_inibin_fixlist = [
             "Spell4EvolveDesc",
             "Spell4EvolveIcon",
         ]
-    },
-    {
-        "sections": [ "HealthBar" ],
-        "names": [
+    ],
+    [
+        [ "HealthBar" ],
+        [
             "AttachToBone",
             "HPPerTick",
             "ParallaxOffset",
@@ -1158,10 +1153,10 @@ all_inibin_fixlist = [
             "XOffset",
             "YOffset",
         ]
-    },
-    {
-        "sections": [ "IdleParticles" ],
-        "names": [
+    ],
+    [
+        [ "IdleParticles" ],
+        [
             "BeamParticle",
             "BeamShouldAlwayStargetEnemy",
             "BeamTargetParticle",
@@ -1174,27 +1169,27 @@ all_inibin_fixlist = [
             "TowerTargetingParticle2",
             "TowerTargetingParticle2Death",
         ]
-    },
-    {
-        "sections": [ *[ "Info{}".format(x if x > 0 else "") for x in range(0, 8) ] ],
-        "names": [
+    ],
+    [
+        [ *[ "Info{}".format(x if x > 0 else "") for x in range(0, 8) ] ],
+        [
             "IconCircle",
             "IconCircleScale",
             "IconMinimap",
             "IconSquare",
         ]
-    },
-    {
-        "sections": [ "Interaction" ],
-        "names": [
+    ],
+    [
+        [ "Interaction" ],
+        [
             "DoubleSided",
             "IdleAnim",
             "RandomizeIdleAnimPhase",
         ]
-    },
-    {
-        "sections": [ *[ "MeshSkin{}".format(x if x > 0 else "") for x in range(0, 30) ] ],
-        "names": [
+    ],
+    [
+        [ *[ "MeshSkin{}".format(x if x > 0 else "") for x in range(0, 30) ] ],
+        [
             "Animations",
             "ArmorMaterial",
             "AttributeFlags",
@@ -1259,37 +1254,37 @@ all_inibin_fixlist = [
             "XOffset",
             "YOffset",
         ]
-    },
-    {
-        "sections": [ "Minimap" ],
-        "names": [
+    ],
+    [
+        [ "Minimap" ],
+        [
             "MinimapIconOverride",
         ]
-    },
-    {
-        "sections": [ "Minion" ],
-        "names": [
+    ],
+    [
+        [ "Minion" ],
+        [
             "AlwaysUpdatePAR",
             "AlwaysVisible",
             "IsTower",
         ]
-    },
-    {
-        "sections": [ "Package" ],
-        "names": [
+    ],
+    [
+        [ "Package" ],
+        [
             "FallbackPackage",
             "FallbackINI",
         ]
-    },
-    {
-        "sections": [ "RecItems", "TutorialRecItems" ],
-        "names": [
+    ],
+    [
+        [ "RecItems", "TutorialRecItems" ],
+        [
             *[ "RecItem{}".format(x) for x in range(1, 7) ],
         ]
-    },
-    {
-        "sections": [ "Sounds" ],
-        "names": [
+    ],
+    [
+        [ "Sounds" ],
+        [
             "Attack1",
             "Attack2",
             "Attack3",
@@ -1307,10 +1302,10 @@ all_inibin_fixlist = [
             "Special1",
             "Special2",
         ]
-    },
-    {
-        "sections": [ "Useable" ],
-        "names": [
+    ],
+    [
+        [ "Useable" ],
+        [
             "AllyCanUse",
             "CooldownSpellSlot",
             "EnemyCanUse",
@@ -1320,43 +1315,37 @@ all_inibin_fixlist = [
             "MinionUseable",
             "MinionUseSpell",
         ]
-    }
+    ]
 ]
 
 all_inibin_fixdict = {
-    h: (s, n) \
-        for sn in all_inibin_fixlist \
-        for s,sh in ihash_s(sn["sections"]) \
-        for n,h in ihash_n(sh, sn["names"])
+    h: (s, n) for sn in all_inibin_fixlist for s,n,h in a_ihash(*sn)
 }
+
+def get_fixdict(inib):
+    return all_inibin_fixdict
 
 # unhashes .inibin with dictionary
 def fix(inib, fixd = None):
-    fixd = all_inibin_fixdict
+    if fixd == None:
+        fixd = get_fixdict(inib)
     if not "Values" in inib:
         inib["Values"] = {}
     if not "UNKNOWN_HASHES" in inib:
         inib["UNKNOWN_HASHES"] = {}
-    unk = inib["UNKNOWN_HASHES"]
     values = inib["Values"]
-    for h in unk.copy():
-        hint = int(h)
-        if hint in fixd:
-            section = fixd[hint][0]
-            name = fixd[hint][1]
-            if not section in values:
-                values[section] = {}
-            values[section][name] = unk[h]
+    unk = inib["UNKNOWN_HASHES"]
+
+    for h, (s, n) in fixd.items():
+        if h in unk:
+            if not s in values:
+                values[s] = {}
+            values[s][n] = unk[h]
             del unk[h]
-            
+    
 def fix_dry(inib, fixd = None):
-    unfixed = 0
     if fixd == None:
-        fixd = all_inibin_fixdict
-    if "UNKNOWN_HASHES" in inib:
-        unfixed = len(inib["UNKNOWN_HASHES"])
-        for h in inib["UNKNOWN_HASHES"]:
-            if int(h) in fixd:
-                unfixed -= 1
-    return unfixed
-        
+        fixd = get_fixdict(inib)
+    return len(inib["UNKNOWN_HASHES"]), len((
+        h for h in inib["UNKNOWN_HASHES"] if h in fixd
+    ))

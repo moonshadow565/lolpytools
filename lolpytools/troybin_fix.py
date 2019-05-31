@@ -4,39 +4,47 @@ RAND_VARS=10
 GPART_VARS=50
 ROT_VARS=10
 FIELD_VARS=10
-COMMENTS=("%s", "'%s") 
+COMMENTS=("%s", "'%s")
 
-def ihash(section, name):
-    ret = 0
-    for c in section + '*' + name:
+def ihash(value, ret = 0):
+    for c in value:
         ret = (ord(c.lower()) +((65599 * ret) & 0xffffffff)) & 0xffffffff
     return ret
 
+def a_ihash(sections, names):
+    for section in sections:
+        sectionhash = ihash('*', ihash(section))
+        for rawname in names:
+            for com in COMMENTS:
+                name = com % rawname
+                ret = ihash(name, sectionhash)
+                yield section, name, ret
+
 # flex('a') -> a_flex0, a_flex1, a_flex2, a_flex_3
 def flex(*args):
-    return ( "%s_flex%d" % (a,x) for a in args for x in range(0, 4) )
+    return [ "%s_flex%d" % (a,x) for a in args for x in range(0, 4) ]
 
 def rand(mods, *args):
-    return (
+    return [
         *args,
-        *( "%s%u" % (a,x) for a in args for x in range(0, RAND_VARS) ),
-        *( "%s%sP" % (a,m) for a in args for m in mods ),
-        *( "%s%sP%u" % (a,m,x) for a in args for m in mods \
+        *[ "%s%u" % (a,x) for a in args for x in range(0, RAND_VARS) ],
+        *[ "%s%sP" % (a,m) for a in args for m in mods ],
+        *[ "%s%sP%u" % (a,m,x) for a in args for m in mods \
             for x in range(0, RAND_VARS)
-        ),
-    )
+        ],
+    ]
 
 def rand_float(*args):
-    return rand(('X', ''), *args)
+    return rand(['X', ''], *args)
 
 def rand_vec2(*args):
-    return rand(('X', 'Y'), *args)
+    return rand(['X', 'Y'], *args)
 
 def rand_vec3(*args):
-    return rand(('X', 'Y', 'Z'), *args)
+    return rand(['X', 'Y', 'Z'], *args)
 
 def rand_color(*args):
-    return rand(('R', 'G', 'B', 'A'), *args)
+    return rand(['R', 'G', 'B', 'A'], *args)
 
 def flex_rand_float(*args):
     return rand_float(*flex(*args))
@@ -50,11 +58,11 @@ def flex_rand_vec3(*args):
 def flex_rand_color(*args):
     return rand_color(*flex(*args))
 
-material_names = (
+material_names = [
     "MaterialOverrideTransMap",
     "MaterialOverrideTransSource",
     "p-trans-sample",
-    *( mat % x for mat in (
+    *[ mat % x for mat in [
         "MaterialOverride%dBlendMode",
         "MaterialOverride%dGlossTexture",
         "MaterialOverride%dEmissiveTexture",
@@ -64,44 +72,44 @@ material_names = (
         "MaterialOverride%dSubMesh",
         "MaterialOverride%dTexture",
         "MaterialOverride%dUVScroll",
-        ) for x in range(0,5) 
-    ),
-)
+        ] for x in range(0,5) 
+    ],
+]
 
-part_group_names = ( 
-    *( "GroupPart%d" % x for x in range(0, GPART_VARS) ),
-)
+part_group_names = [
+    *[ "GroupPart%d" % x for x in range(0, GPART_VARS) ],
+]
 
-part_field_names = ( 
-    *( field % x for field in (
+part_field_names = [
+    *[ field % x for field in [
             "field-accel-%d",
             "field-attract-%d",
             "field-drag-%d",
             "field-noise-%d",
             "field-orbit-%d",
-        ) for x in range(1, FIELD_VARS)
-    ),
-)
+        ] for x in range(1, FIELD_VARS)
+    ],
+]
 
-part_fluid_names = (
+part_fluid_names = [
     "fluid-params",
-)
+]
 
-system_names = (
+system_names = [
     "AudioFlexValueParameterName",
     "AudioParameterFlexID",
     "build-up-time",
     "group-vis",
     "group-scale-cap",
-    *( g % x for g in (
+    *[ g % x for g in [
         "GroupPart%d",
         "GroupPart%dType",
         "GroupPart%dImportance",
         "Override-Offset%d",
         "Override-Rotation%d",
         "Override-Scale%d",
-        ) for x in range(0, GPART_VARS)
-    ),
+        ] for x in range(0, GPART_VARS)
+    ],
     "KeepOrientationAfterSpellCast",
     *material_names,
     "PersistThruDeath",
@@ -116,9 +124,9 @@ system_names = (
     "SoundsPlayWhileOffScreen",
     "VoiceOverOnCreate",
     "VoiceOverPersistent",
-)
+]
 
-group_names = (
+group_names = [
     "ExcludeAttachmentType",
     "KeywordsExcluded",
     "KeywordsIncluded",
@@ -239,7 +247,7 @@ group_names = (
     
     *flex(
         "p-scale", 
-        "p-scaleEmitOffset"
+        "p-scaleEmitOffset",
     ),
     *flex_rand_float(
         "e-rate",
@@ -247,7 +255,7 @@ group_names = (
         "p-rotvel",
     ),
     *flex_rand_vec2(
-        "e-uvoffset"
+        "e-uvoffset",
     ),
     *flex_rand_vec3(
         "p-offset",
@@ -271,7 +279,7 @@ group_names = (
         "p-scale",
         "p-xquadrot",
         "p-xscale",
-        "e-rate"
+        "e-rate",
     ),
     *rand_vec2(
         "e-ratebyvel",
@@ -304,21 +312,21 @@ group_names = (
     "ChildSpawnAtBone",
     "ChildEmitOnDeath",
     "p-childProb",
-    *( name % x for name in (
+    *[ name % x for name in [
             "ChildParticleName%d",
             "ChildSpawnAtBone%d",
             "ChildEmitOnDeath%d",
-        ) for x in range(0, 10)
-    ),
+        ] for x in range(0, 10)
+    ],
 
-    *rand_float( *( "e-rotation%d" % x for x in range(0,ROT_VARS) ) ),
-    *( "e-rotation%d-axis" % x for x in range(0,ROT_VARS) ),
+    *rand_float( *[ "e-rotation%d" % x for x in range(0,ROT_VARS) ] ),
+    *[ "e-rotation%d-axis" % x for x in range(0,ROT_VARS) ],
     
     *part_field_names,
     *part_fluid_names,
-)
+]
 
-fluid_names = (
+fluid_names = [
     "f-accel",
     "f-buoyancy",
     "f-denseforce",
@@ -332,16 +340,16 @@ fluid_names = (
     "f-startkick",
     "f-rate",
     "f-rendersize",
-    *( jet % x for jet in (
+    *[ jet % x for jet in [
             "f-jetdir%u",
             "f-jetdirdiff%u",
             "f-jetpos%u",
             "f-jetspeed%u",
-        ) for x in range(0, 4)
-    ),
-)
+        ] for x in range(0, 4)
+    ],
+]
 
-field_names = (
+field_names = [
     "f-axisfrac",
     "f-localspace",
     *rand_float(
@@ -352,78 +360,49 @@ field_names = (
         "f-veldelta",
     ),
     *rand_vec3(
-        "f-accel"
-        "f-direction"
+        "f-accel",
+        "f-direction",
         "f-pos",
     ),
-)
+]
 
-def get_section(tbin, section, args):
+def get_values(tbin, sections, names):
     vals = tbin["Values"]
     unks = tbin["UNKNOWN_HASHES"]
-    for a in args:
-        for com in COMMENTS:
-            name = com % a
-            h = ihash(section, name)
-            if section in vals and name in vals[section]:
-                yield vals[section][name]
-            elif h in unks:
-                yield unks[h]
+    for section, name, h in a_ihash(sections, names):
+        if h in unks:
+            yield unks[h]
+        elif section in vals and name in vals[section]:
+            yield vals[section][name]
 
-def fix_section(tbin, section, args):
-    vals = tbin["Values"]
-    unks = tbin["UNKNOWN_HASHES"]
-    for a in args:
-        for com in COMMENTS:
-            name = com % a
-            h = ihash(section, name)
-            if h in unks:
-                res = unks[h]
-                if not section in vals:
-                    vals[section] = {}
-                vals[section][name] = res
-                del unks[h]
 
-def fix_dict(tbin):
-    n_group = get_section(tbin, "System", part_group_names)
-    return {
-        **{ 
-            ihash("System", n) : ("System", n) for n in system_names
-        },
-        **{
-            ihash(g, n) : (g, n) for g in n_group \
-                for n in group_names
-        },
-        **{
-            ihash(s, n) : (s, n) for g in n_group \
-                for s in get_section(tbin, g, part_field_names) \
-                for n in field_names
-        },
-        **{
-            ihash(s, n) : (s, n) for g in n_group \
-                for s in get_section(tbin, g, part_fluid_names) \
-                for n in fluid_names
-        },
-        **{
-            ihash(s, n) : (s, n) for s, sects in tbin["Values"].items() \
-                for n in sects
-        },
-    }
-
-def fix(tbin):
+def get_fixdict(tbin):
     if not "Values" in tbin:
         tbin["Values"] = {}
     if not "UNKNOWN_HASHES" in tbin:
         tbin["UNKNOWN_HASHES"] = {}
+    groups = tuple(get_values(tbin, ["System"], part_group_names))
+    fields = tuple(get_values(tbin, groups, part_field_names))
+    fluids = tuple(get_values(tbin, groups, part_fluid_names))
 
-    fix_section(tbin, "System", system_names)
-    for group in get_section(tbin, "System", part_group_names):
-        fix_section(tbin, group, group_names)
-        
-        for field in get_section(tbin, group, part_field_names):
-            fix_section(tbin, field, field_names)
-            
-        for fluid in get_section(tbin, group, part_fluid_names):
-            fix_section(tbin, fluid, fluid_names)
+    return {
+        h : (s, n) for sn in [
+            [ groups, group_names, ],
+            [ fields, field_names, ],
+            [ fluids, fluid_names, ],
+            [ ["System"], system_names, ],
+        ] for s,n,h in a_ihash(*sn)
+    }
 
-
+def fix(tbin, fixd = None):
+    if fixd == None:
+        fixd = get_fixdict(tbin)
+    vals = tbin["Values"]
+    unks = tbin["UNKNOWN_HASHES"]
+    for h, (s, n) in fixd.items():
+        if h in unks:
+            if not s in vals:
+                vals[s] = {}
+            vals[s][n] = unks[h]
+            del unks[h]
+    
