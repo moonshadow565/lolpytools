@@ -32,9 +32,9 @@ def sanitize_str(data):
     elif RE_NAN.match(data):
         return NAN_VALUE
     elif RE_INT_VEC.match(data):
-        return [int(x) for x in data.replace('\t', ' ').split(' ') if x]
+        return tuple( int(x) for x in data.replace('\t', ' ').split(' ') if x )
     elif RE_DECIMAL_VEC.match(data):
-        return [float(x) for x in data.replace('\t', ' ').split(' ') if x]
+        return tuple( float(x) for x in data.replace('\t', ' ').split(' ') if x )
     elif RE_INT.match(data):
         return int(data)
     elif RE_DECIMAL.match(data):
@@ -59,9 +59,10 @@ def read_2(buffer, target):
         for x in range(0, num):
             keys.append(struct.unpack("<I", buffer.read(4))[0])
         for x in range(0, num):
-            tmp = []
-            for y in range(0, count):
-                tmp.append(struct.unpack(fmt, buffer.read(struct.calcsize(fmt)))[0] * mul)
+            tmp = tuple(
+                struct.unpack(fmt, buffer.read(struct.calcsize(fmt)))[0] * mul \
+                    for y in range(0, count)
+            )
             result[keys[x]] = tmp[0] if count == 1 else tmp
         return result
 
@@ -76,7 +77,7 @@ def read_2(buffer, target):
             result[keys[x]] = int(bools[x])         
         return result
 
-    def read_strings(buffer, stringsLength):
+    def read_strings(buffer, stringsLength, dumy=None):
         result = {}
         offsets = read_numbers(buffer, "<H")
         data = buffer.read(stringsLength)
@@ -90,23 +91,23 @@ def read_2(buffer, target):
         return result
     stringsLength = struct.unpack("<H", buffer.read(2))[0]
     flags = read_flags(buffer, 16)
-    read_conf = [
-        [read_numbers, ["<i"]],           #0  - 1 x int
-        [read_numbers, ["<f"]],           #1  - 1 x float 
-        [read_numbers, ["<B", 1, 0.1]],   #2  - 1 x byte * 0.1
-        [read_numbers, ["<h"]],           #3  - 1 x short
-        [read_numbers, ["<B"]],           #4  - 1 x byte 
-        [read_bools, []],                 #5  - 1 x bools 
-        [read_numbers, ["<B", 3, 0.1]],   #6  - 3 x byte * 0.1
-        [read_numbers, ["<f", 3]],        #7  - 3 x float
-        [read_numbers, ["<B", 2, 0.1]],   #8  - 2 x byte * 0.1
-        [read_numbers, ["<f", 2]],        #9  - 2 x float
-        [read_numbers, ["<B", 4, 0.1]],   #10 - 4 x byte * 0.1
-        [read_numbers, ["<f", 4]],        #11 - 4 x float
-        [read_strings, [stringsLength]],  #12 - strings
+    read_conf = (
+        (read_numbers, ("<i", 1)),          #0  - 1 x int
+        (read_numbers, ("<f", 1)),          #1  - 1 x float 
+        (read_numbers, ("<B", 1, 0.1)),     #2  - 1 x byte * 0.1
+        (read_numbers, ("<h", 1)),          #3  - 1 x short
+        (read_numbers, ("<B", 1)),          #4  - 1 x byte 
+        (read_bools,   ()),                 #5  - 1 x bools 
+        (read_numbers, ("<B", 3, 0.1)),     #6  - 3 x byte * 0.1
+        (read_numbers, ("<f", 3)),          #7  - 3 x float
+        (read_numbers, ("<B", 2, 0.1)),     #8  - 2 x byte * 0.1
+        (read_numbers, ("<f", 2)),          #9  - 2 x float
+        (read_numbers, ("<B", 4, 0.1)),     #10 - 4 x byte * 0.1
+        (read_numbers, ("<f", 4)),          #11 - 4 x float
+        (read_strings, (stringsLength, 0)), #12 - strings
         # TODO: are strings stored at the end of file allways??
-        #[read_numbers, ["<q"]],           #13 - long long
-    ]
+        #(read_numbers, tuple("<q")),           #13 - long long
+    )
     for x in range(0, 16):
         if flags[x]:
             if x < len(read_conf):

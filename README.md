@@ -9,4 +9,4 @@ Supported formats:
 Supported converters:
  - inibin to ini
  - luaobj to lua
-
+ - troybin to troy

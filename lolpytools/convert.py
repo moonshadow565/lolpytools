@@ -1,18 +1,17 @@
 #!/bin/env python
 from . import inibin
 from . import inibin_fix
+from . import troybin_fix
 from . import plua
 import json
 
-def inibin2ini(infile, outfile):
-    ibin = inibin.read(infile)
-    inibin_fix.fix(ibin)
+def writeini(ibin, outfile):
     def write_value(name, value):
         if isinstance(value, str):
             outfile.write('{}="{}"\n'.format(name, value))
         elif isinstance(value, bool):
             outfile.write('{}={}\n'.format(name, '1' if value else '0'))
-        elif isinstance(value, list):
+        elif isinstance(value, list) or isinstance(value, tuple):
             outfile.write('{}={}\n'.format(name, ' '.join([str(x) for x in value])))
         else:
             outfile.write('{}={}\n'.format(name, value))
@@ -23,6 +22,18 @@ def inibin2ini(infile, outfile):
         outfile.write('\n')
     for name, value in sorted(ibin["UNKNOWN_HASHES"].items()):
         write_value(";UNKNOWN_HASH {}".format(name), value)
+
+
+def inibin2ini(infile, outfile):
+    ibin = inibin.read(infile)
+    inibin_fix.fix(ibin)
+    writeini(ibin, outfile)
+
+
+def troybin2troy(infile, outfile):
+    ibin = inibin.read(infile)
+    troybin_fix.fix(ibin)
+    writeini(ibin, outfile)
 
 def luaobj2lua(infile, outfile):
     g = plua.read(infile)["Values"]
