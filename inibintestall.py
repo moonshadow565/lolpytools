@@ -1,5 +1,6 @@
 #!/bin/env python
 from lolpytools.inibin_fix import fix_dry
+from lolpytools.inibin_fix import fix
 import argparse
 import sys
 import json
@@ -15,8 +16,11 @@ def main(args):
     else:
         infile = open(args.infile, 'r')
     j = json.load(infile)
-    j["UNKNOWN_HASHES"] = dict({  int(k) : v for k,v in j["UNKNOWN_HASHES"].items() })
-    print(fix_dry(j))
+    j["Values"] = {}
+    j["UNKNOWN_HASHES"] ={ int(k) : v for k,v in j["UNKNOWN_HASHES"].items() }
+    fix(j)
+    print(json.dumps(j["Values"], sort_keys=True, indent=2 ))
+    print(len(j["UNKNOWN_HASHES"]))
 
 if __name__ == '__main__':
     main(sys.argv[1:])
