@@ -131,6 +131,29 @@ all_inibin_fixlist = [
             *[ "Level{}".format(x) for x in range(0, 31) ]
         ]
     ],
+# LEVELS/MapX/ExpCurve.inibin
+    [
+        [ "Experience", ],
+        [ 
+            * [ "PlayerMinionSplitXP%d" % x \
+                for x in range(1, 6) 
+            ],
+        ],
+    ],
+    [
+        [ "BehaviorTreeMetaData", ],
+        [
+            "BehaviorTreeNodeLibraryCommon",
+            "BehaviorTreeNodeLibraryClient",
+            "BehaviorTreeNodeLibraryServer",
+        ],
+    ],
+    [
+        [ "LoadScreen", ],
+        [
+            "ScreenToLoad",
+        ]
+    ],
 # LEVELS/MapX/StatsProgression.inibin
     [
         [ "PerLevelStatsFactor" ],
