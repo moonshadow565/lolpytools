@@ -31,6 +31,13 @@ all_mutators = [
     "NightmareBots",
 ]
 
+def map_vars(*args):
+    return [
+        *args,
+        *[ "Map%d_%s" % (x,a) for a in args for x in range(0, 15) ],
+    ]
+
+
 all_inibin_fixlist = [
 # LEVELS/MapX/DeathTimes.inibin
     [
@@ -66,7 +73,7 @@ all_inibin_fixlist = [
     [
         [ "TimeDeadPerLevel", "TimeDeadPerLevelTutorial" ],
         [
-            *[ "Level{:02}".format(x) for x in range(0, 31) ]
+            *[ "Level%02d" % x for x in range(0, 31) ]
         ]  
     ],
 # LEVELS/MapX/Items.inibin
@@ -74,18 +81,18 @@ all_inibin_fixlist = [
         [ 
             "ItemInclusionList",
             "UnpurchasableItemList",
-            *[ "UnpurchasableItemList_{}".format(x) for x in all_mutators ],
+            *[ "UnpurchasableItemList_%s" % x for x in all_mutators ],
         ],
         [
-            *[ "Item{}".format(x) for x in range(0, 200) ]
+            *[ "Item%d" % x for x in range(0, 200) ]
         ]
     ],
 # LEVELS/MapX/NeutralTimers.inibin
     [
         [ "General" ],
         [ 
-            *[ "Element{}".format(x) for x in range(0, 10) ],
-            *[ "Element{}_{}".format(x, y) for x in range(0, 10) for y in [
+            *[ "Element%d" % x for x in range(0, 10) ],
+            *[ "Element%d_%s" % (x, y) for x in range(0, 10) for y in [
                     "Default",
                     "Colorblind",
                     "Spectator",
@@ -100,12 +107,12 @@ all_inibin_fixlist = [
     ],
     [
         [
-            *[ "Timer{}".format(x) for x in range(0, 10) ]
+            *[ "Timer%d" % x for x in range(0, 10) ]
         ],
         [
             "HudHandleText",
             "HudHandleIcon",
-            *[ "HudHandleIcon_{}".format(x) for x in [
+            *[ "HudHandleIcon_%s" % x for x in [
                     "Default",
                     "Colorblind",
                     "Spectator",
@@ -128,7 +135,7 @@ all_inibin_fixlist = [
     [
         [ "PerLevelStatsFactor" ],
         [
-            *[ "Level{}".format(x) for x in range(0, 31) ]
+            *[ "Level%d" % x for x in range(0, 31) ]
         ]
     ],
 # DATA/Globals/ABGroups.inibin
@@ -144,7 +151,7 @@ all_inibin_fixlist = [
     [
         [ "Karma" ], 
         [
-            *[ "Critical{}".format(c) for c in range(0, 201) ]
+            *[ "Critical%d" % c for c in range(0, 201) ]
         ]
     ],
 # Data/Globals/Tips.inibin
@@ -174,7 +181,7 @@ all_inibin_fixlist = [
             *all_mutators
         ],
         [
-            *[ "Mutator{}".format(x) for x in range(0, 10) ],
+            *[ "Mutator%d" % x for x in range(0, 10) ],
         ],
     ],
 # DATA/Globals/Bounty.inibin
@@ -326,7 +333,7 @@ all_inibin_fixlist = [
             "Objectives",
         ],
         [
-            *[ "{}{}".format(x, y) for x in [
+            *[ "%s%s" % (x, y) for x in [
                     "RecievedSound",
                     "CompletedSound",
                     "FailedSound",
@@ -350,15 +357,64 @@ all_inibin_fixlist = [
             "NCoefficient",
         ]
     ],
+# DATA/Particles/ParticlesDefault.inibin
+    [
+        [ "GlobalEffects" ],
+        [
+            "Default",
+            "MinionDeath",
+            "TurretDeath",
+            "ChaosBarracksDamper",
+            "OrderBarracksDamper",
+            "ChaosBarrackDeath",
+            "OrderBarrackDeath",
+            "LevelUp",
+            "HeroKilledByNeutral",
+            "HeroKilledByHero",
+            "HeroKilledByPlayer",
+            "HeroKilledAssistedByPlayer",
+            "HeroEnemyKilled",
+            "HeroAllyKilled",
+            "HeroRedKilledSpectator",
+            "HeroBlueKilledSpectator",
+            "HeroRespawn",
+            "CursorMoveTo",
+            "CursorMoveToRed",
+            "CursorCast",
+            "FountainHeal",
+            "FocusTarget",
+            "DefendTarget",
+            "CommandTarget",
+            "CommandGround",
+            "ComeHere",
+            "OMW",
+            "Retreat",
+            "Danger",
+            "MIA",
+            "GoldAcquisition",
+            "MissingInstant",
+            "MissingLingering",
+            "StartHeroSpawn",
+            "ChaosHQDeath",
+            "OrderHQDeath",
+            "ChampionIndicator",
+            "MaxIdentifier",
+            * [ "EffectName%d" % x for x in range(0, 40) ],
+            * [ "FileName%d" % x for x in range(0, 40) ],
+            * [ "Key%d" % x for x in  range(0, 40) ],
+            * [ "State%d" % x for x in range(0, 40) ],
+        ],
+    ],
+
 # DATA/Characters/HeroSpawnOffsets.inibin
     [
         [
-            * [ "Chaos{}".format(x) for x in range(1, 7) ],
-            * [ "Order{}".format(x) for x in range(1, 7) ],
+            * [ "Chaos%d" % x for x in range(1, 7) ],
+            * [ "Order%d" % x for x in range(1, 7) ],
         ],
         [
-            * [ "Pos{}".format(x) for x in range(1, 7) ],
-            * [ "Facing{}".format(x) for x in range(1, 7) ],
+            * [ "Pos%d" % x for x in range(1, 7) ],
+            * [ "Facing%d" % x for x in range(1, 7) ],
         ],
     ],
 # spells, items, talents (everything is a buff -.-)
@@ -371,9 +427,9 @@ all_inibin_fixlist = [
             "DynamicExtended",
             "DynamicTooltip",
             "DeathRecapPriority",
-            *[ "Effect{}Level{}Amount".format(x, y) for x in range(0, 17) for y in range(0, 7) ],
-            *[ "FloatStaticsDecimals{}".format(x) for x in range(0, 17) ],
-            *[ "FloatVarsDecimals{}".format(x) for x in range(0, 17) ],
+            *[ "Effect%dLevel%dAmount" % (x, y) for x in range(0, 17) for y in range(0, 7) ],
+            *[ "FloatStaticsDecimals%d" % x for x in range(0, 17) ],
+            *[ "FloatVarsDecimals%d" % x for x in range(0, 17) ],
             "HideDurationInUI",
             "InventoryIcon",
             "ShowInTrackerUI",
@@ -386,7 +442,7 @@ all_inibin_fixlist = [
     [
         [ "Builds" ],
         [
-            *[ "Item{}".format(x) for x in range(0, 17) ]
+            *[ "Item%d" % x for x in range(0, 17) ]
         ]
     ],
     [
@@ -439,7 +495,7 @@ all_inibin_fixlist = [
             "DisplayName",
             "DropsOnDeath",
             "DynamicTooltip",
-            *[ "Effect{}Amount".format(x) for x in range(0, 16) ],
+            *[ "Effect%dAmount" % x for x in range(0, 16) ],
             "EffectRadius",
             "Epicness",
             "FlatArmorMod",
@@ -524,9 +580,9 @@ all_inibin_fixlist = [
             "PercentTenacityRuneMod",
             "PlatformEnabled",
             "Price",
-            *[ "RecipeItem{}".format(x) for x in range(0, 10) ],
+            *[ "RecipeItem%d" % x for x in range(0, 10) ],
             "RequiredChampion",
-            *[ "RequiredItem{}".format(x) for x in range(0, 10) ],
+            *[ "RequiredItem%d" % x for x in range(0, 10) ],
             "RequiredLevel",
             "RequiredSpellName",
             "rFlatArmorModPerLevel",
@@ -606,6 +662,13 @@ all_inibin_fixlist = [
         ]
     ],
     [
+        [ "Data", ],
+        [
+            "SpellDelayCastTime",
+            "SpellDelayTotalTime",
+        ],
+    ],
+    [
         [ "SpellData" ],
         [
             "AfterEffectName",
@@ -621,9 +684,9 @@ all_inibin_fixlist = [
             "AmmoCountHiddenInUI",
             "AmmoNotAffectedByCDR",
             "AmmoRechargeTime",
-            *[ "AmmoRechargeTime{}".format(x) for x in range(0, 7) ],
+            *[ "AmmoRechargeTime%d" % x for x in range(0, 7) ],
             "AmmoUsed",
-            *[ "AmmoUsed{}".format(x) for x in range(0, 7) ],
+            *[ "AmmoUsed%d" % x for x in range(0, 7) ],
             "AnimationLeadOutName",
             "AnimationLoopName",
             "AnimationName",
@@ -646,26 +709,26 @@ all_inibin_fixlist = [
             "CastConeAngle",
             "CastConeDistance",
             "CastFrame",
-            "CastRadius",
-            *[ "CastRadius{}".format(x) for x in range(0, 7) ],
-            "CastRadiusSecondary",
-            *[ "CastRadiusSecondary{}".format(x) for x in range(0, 7) ],
+            *map_vars("CastRadius"),
+            *map_vars(*[ "CastRadius%d" % x for x in range(0, 7) ]),
+            *map_vars("CastRadiusSecondary"),
+            *map_vars(*[ "CastRadiusSecondary%d" % x for x in range(0, 7) ]),
             "CastRadiusSecondaryTexture",
             "CastRadiusTexture",
-            "CastRange",
-            *[ "CastRange{}".format(x) for x in range(0, 7) ],
-            "CastRangeDisplayOverride",
-            *[ "CastRangeDisplayOverride{}".format(x) for x in range(0, 7) ],
+            *map_vars("CastRange"),
+            *map_vars(*[ "CastRange%d" % x for x in range(0, 7) ]),
+            *map_vars("CastRangeDisplayOverride"),
+            *map_vars(*[ "CastRangeDisplayOverride%d" % x for x in range(0, 7) ]),
             "CastRangeGrowthDuration",
-            *[ "CastRangeGrowthDuration{}".format(x) for x in range(0, 7) ],
+            *[ "CastRangeGrowthDuration%d" % x for x in range(0, 7) ],
             "CastRangeGrowthMax",
-            *[ "CastRangeGrowthMax{}".format(x) for x in range(0, 7) ],
+            *[ "CastRangeGrowthMax%d" % x for x in range(0, 7) ],
             "CastRangeTextureOverrideName",
             "CastRangeUseBoundingBoxes",
             "CastTargetAdditionalUnitsRadius",
             "CastType",
             "ChannelDuration",
-            *[ "ChannelDuration{}".format(x) for x in range(0, 7) ],
+            *[ "ChannelDuration%d" % x for x in range(0, 7) ],
             "ChargeUpdateInterval",
             "CircleMissileAngularVelocity",
             "CircleMissileRadialVelocity",
@@ -673,8 +736,8 @@ all_inibin_fixlist = [
             "Coefficient",
             "Coefficient2",
             "ConsideredAsAutoAttack",
-            "Cooldown",
-            *[ "Cooldown{}".format(x) for x in range(0, 7) ],
+            *map_vars("Cooldown"),
+            *map_vars(*[ "Cooldown%d" % x for x in range(0, 7) ]),
             "CursorChangesInGrass",
             "CursorChangesInTerrain",
             "DeathRecapPriority",
@@ -688,11 +751,14 @@ all_inibin_fixlist = [
             "DrawSecondaryLineIndicator",
             "DynamicExtended",
             "DynamicTooltip",
-            *[ "Effect{}Level{}Amount".format(x, y) for x in range(0, 17) for y in range(0, 7) ],
+            *map_vars(*[
+                "Effect%dLevel%dAmount" % (x, y) \
+                    for x in range(0, 17) for y in range(0, 7)
+            ]),
             "ExcludedUnitTags",
             "Flags",
-            *[ "FloatStaticsDecimals{}".format(x) for x in range(0, 17) ],
-            *[ "FloatVarsDecimals{}".format(x) for x in range(0, 17) ],
+            *[ "FloatStaticsDecimals%d" % x for x in range(0, 17) ],
+            *[ "FloatVarsDecimals%d" % x for x in range(0, 17) ],
             "HaveAfterEffect",
             "HaveHitBone",
             "HaveHitEffect",
@@ -711,7 +777,7 @@ all_inibin_fixlist = [
             "IsDisabledWhileDead",
             "IsToggleSpell",
             "KeywordWhenAcquired",
-            *[ "Level{}Desc".format(x) for x in range(0, 7) ],
+            *[ "Level%dDesc" % x for x in range(0, 7) ],
             "LineDragLength",
             "LineMissileBounces",
             "LineMissileCollisionFromStartPoint",
@@ -726,16 +792,15 @@ all_inibin_fixlist = [
             "LineTargetingBaseTextureOverrideName",
             "LineTargetingTargetTextureOverrideName",
             "LineWidth",
-            *[ "LocationTargettingLength{}".format(x) for x in range(0, 8) ],
-            *[ "LocationTargettingWidth{}".format(x) for x in range(0, 8) ],
+            *[ "LocationTargettingLength%d" % x for x in range(0, 8) ],
+            *[ "LocationTargettingWidth%d" % x for x in range(0, 8) ],
             "LockConeToPlayer",
             "LookAtPolicy",
             "LuaOnMissileUpdateDistanceInterval",
             "ManaCost",
-            *[ "ManaCost{}".format(x) for x in range(0, 8) ],
-            *[ "Map{}_Effect{}Level{}Amount".format(m, x, y) for x in range(0, 17) for y in range(0, 7) for m in range(0,15) ],
+            *[ "ManaCost%d" % x for x in range(0, 8) ],
             "MaxAmmo",
-            *[ "MaxAmmo{}".format(x) for x in range(0, 7) ],
+            *[ "MaxAmmo%d" % x for x in range(0, 7) ],
             "MaxGrowthRangeTextureName",
             "MaxGrowthLineBaseTextureName",
             "MaxGrowthLineTargetTextureName",
@@ -747,6 +812,7 @@ all_inibin_fixlist = [
             "MissileBoneName",
             "MissileBlockTriggersOnDestroy",
             "MissileEffect",
+            "MissileEffectEnemy",
             "MissileEffectPlayer",
             "MissileFixedTravelTime",
             "MissileFollowsTerrainHeight",
@@ -837,24 +903,24 @@ all_inibin_fixlist = [
         [
             "CastRadius",
             "CastRadiusTexture",
-            "CastRange",
-            *[ "CastRange{}".format(x) for x in range(1, 8) ],
+            *map_vars("CastRange"),
+            *map_vars(*[ "CastRange%d" % x for x in range(1, 8) ]),
             "CastRangeGrowthMax",
-            *[ "CastRangeGrowthMax{}".format(x) for x in range(1, 8) ],
+            *[ "CastRangeGrowthMax%d" % x for x in range(1, 8) ],
             "CastRangeGrowthDuration",
-            *[ "CastRangeGrowthDuration{}".format(x) for x in range(1, 8) ],
+            *[ "CastRangeGrowthDuration%d" % x for x in range(1, 8) ],
             "LineTargetingBaseTextureOverrideName",
             "LineTargetingTargetTextureOverrideName",
             "LineWidth",
-            *[ "LocationTargettingWidth{}".format(x) for x in range(1, 7) ],
-            *[ "LocationTargettingLength{}".format(x) for x in range(1, 7) ],
+            *[ "LocationTargettingWidth%d" % x for x in range(1, 7) ],
+            *[ "LocationTargettingLength%d" % x for x in range(1, 7) ],
             "TargettingType",
         ]
     ],
     [
-        [ *["SpellTargeter{}".format(x) for x in range(0, 9)] ],
+        [ *["SpellTargeter%d" % x for x in range(0, 9)] ],
         [
-            *[ "{}{}".format(x,y) for x in [
+            *[ "%s%s" % (x,y) for x in [
                     "ConstraintPos",
                     "Center",
                     "End",
@@ -881,7 +947,7 @@ all_inibin_fixlist = [
             "IsConstrainedToRange",
             "IsClockwiseArc",
             "Length",
-            *[ "Length{}".format(x) for x in range(0,7) ],
+            *[ "Length%d" % x for x in range(0,7) ],
             "LineStopsAtEndPosition",
             "LineTargetingTargetTextureOverrideName",
             "LineTargetingBaseTextureOverrideName",
@@ -892,13 +958,13 @@ all_inibin_fixlist = [
             "MinAngleRangeFactor",
             "MinimumDisplayedRange",
             "OverrideBaseRange",
-            *[ "OverrideBaseRange{}".format(x) for x in range(0,7) ],
+            *[ "OverrideBaseRange%d" % x for x in range(0,7) ],
             "OverrideRadius",
-            *[ "OverrideRadius{}".format(x) for x in range(0,7) ],
+            *[ "OverrideRadius%d" % x for x in range(0,7) ],
             "RangeGrowthDuration",
-            *[ "RangeGrowthDuration{}".format(x) for x in range(0,7) ],
+            *[ "RangeGrowthDuration%d" % x for x in range(0,7) ],
             "RangeGrowthMax",
-            *[ "RangeGrowthMax{}".format(x) for x in range(0,7) ],
+            *[ "RangeGrowthMax%d" % x for x in range(0,7) ],
             "RangeIndicatorTextureName",
             "Start",
             "TargettingType",
@@ -913,7 +979,7 @@ all_inibin_fixlist = [
             "TextureTargetOverride",
             "TextureWall",
             "Thickness",
-            *[ "Thickness{}".format(x) for x in range(0,7) ],
+            *[ "Thickness%d" % x for x in range(0,7) ],
             "ThicknessOffset",
             "UseCasterBoundingBox",
             "UseGlobalLineIndicator",
@@ -937,9 +1003,9 @@ all_inibin_fixlist = [
             "AcquisitionRange",
             "AllowPetControl",
             "AlwaysVisible",
-            "Armor",
+            *map_vars("Armor"),
             "ArmorMaterial",
-            "ArmorPerLevel",
+            *map_vars("ArmorPerLevel"),
             "AssetCategory",
             "AttackAutoInterruptPercent",
             "AttackCastTime",
@@ -955,14 +1021,14 @@ all_inibin_fixlist = [
             "BaseCritChance",
             "BaseDamage",
             "BaseDodge",
-            "BaseFactorHPRegen",
-            "BaseFactorMPRegen",
-            "BaseHP",
-            "BaseMP",
+            *map_vars("BaseFactorHPRegen"),
+            *map_vars("BaseFactorMPRegen"),
+            *map_vars("BaseHP"),
+            *map_vars("BaseMP"),
             "BaseMissChance",
             "BaseSpellEffectiveness",
-            "BaseStaticHPRegen",
-            "BaseStaticMPRegen",
+            *map_vars("BaseStaticHPRegen"),
+            *map_vars("BaseStaticMPRegen"),
             "BotEnabled",
             "BotEnabledMM",
             "CastShadows",
@@ -1089,15 +1155,15 @@ all_inibin_fixlist = [
             "Significance",
             "SkipDrawOutline",
             "SoulGivenOnDeath",
-            *[ s.format(x) for x in range(1, 5) for s in [
-                    "Spell{}",
-                    "Spell{}Desc",
-                    "Spell{}DisplayName",
-                    "SpellsUpLevels{}",
+            *[ s % x for x in range(1, 5) for s in [
+                    "Spell%d",
+                    "Spell%dDesc",
+                    "Spell%dDisplayName",
+                    "SpellsUpLevels%d",
                 ]
             ],
-            "SpellBlock",
-            "SpellBlockPerLevel",
+            *map_vars("SpellBlock"),
+            *map_vars("SpellBlockPerLevel"),
             "SR_easy",
             "SR_medium",
             "SR_hard",
@@ -1120,7 +1186,7 @@ all_inibin_fixlist = [
     [
         [ "DefaultAnimations" ],
         [
-            *[ "Animation{}".format(x) for x in range(1, 10) ],
+            *[ "Animation%d" % x for x in range(1, 10) ],
             "NumberOfAnimations",
             "Significance",
         ]
@@ -1164,7 +1230,7 @@ all_inibin_fixlist = [
             "GameplayCollisionRadius",
             "NumberOfParticles",
             "SelfIllumination",
-            *[ "Particle{}".format(x) for x in range(0, 100) ],
+            *[ "Particle%d" % x for x in range(0, 100) ],
             "TowerTargetingParticle",
             "TowerTargetingParticle2",
             "TowerTargetingParticle2Death",
@@ -1210,16 +1276,16 @@ all_inibin_fixlist = [
             "HPPerTick",
             "IconAvatar",
             "IsOpaque",
-            *[ mat.format(x) for x in range(0,5) for mat in [
-                    "MaterialOverride{}BlendMode",
-                    "MaterialOverride{}GlossTexture",
-                    "MaterialOverride{}EmissiveTexture",
-                    "MaterialOverride{}FixedAlphaScrolling",
-                    "MaterialOverride{}Priority",
-                    "MaterialOverride{}RenderingMode",
-                    "MaterialOverride{}SubMesh",
-                    "MaterialOverride{}Texture",
-                    "MaterialOverride{}UVScroll",
+            *[ mat % x for x in range(0,5) for mat in [
+                    "MaterialOverride%dBlendMode",
+                    "MaterialOverride%dGlossTexture",
+                    "MaterialOverride%dEmissiveTexture",
+                    "MaterialOverride%dFixedAlphaScrolling",
+                    "MaterialOverride%dPriority",
+                    "MaterialOverride%dRenderingMode",
+                    "MaterialOverride%dSubMesh",
+                    "MaterialOverride%dTexture",
+                    "MaterialOverride%dUVScroll",
                 ]
             ],
             "MaterialOverrideTransMap",
@@ -1279,7 +1345,7 @@ all_inibin_fixlist = [
     [
         [ "RecItems", "TutorialRecItems" ],
         [
-            *[ "RecItem{}".format(x) for x in range(1, 7) ],
+            *[ "RecItem%d" % x for x in range(1, 7) ],
         ]
     ],
     [
@@ -1347,5 +1413,5 @@ def fix_dry(inib, fixd = None):
     if fixd == None:
         fixd = get_fixdict(inib)
     return len(inib["UNKNOWN_HASHES"]), len((
-        h for h in inib["UNKNOWN_HASHES"] if h in fixd
+        *(h for h in inib["UNKNOWN_HASHES"] if h in fixd),
     ))

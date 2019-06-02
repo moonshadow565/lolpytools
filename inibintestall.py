@@ -15,6 +15,7 @@ def main(args):
     else:
         infile = open(args.infile, 'r')
     j = json.load(infile)
+    j["UNKNOWN_HASHES"] = dict({  int(k) : v for k,v in j["UNKNOWN_HASHES"].items() })
     print(fix_dry(j))
 
 if __name__ == '__main__':
