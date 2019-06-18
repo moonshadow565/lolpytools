@@ -16,6 +16,9 @@ def a_ihash(sections, names):
                 ret = ihash(name, sectionhash)
                 yield section, name, ret
 
+def s_n(s, *names):
+    return [ [s], [*names], ]
+
 all_gamemodes = [
     "ARAM",
     "CLASSIC",
@@ -160,6 +163,57 @@ all_inibin_fixlist = [
         [
             *[ "Level%d" % x for x in range(0, 31) ]
         ]
+    ],
+# LEVELS/MapX/terrain.inibin
+    s_n("AlphaTest", "cut_off",),
+    s_n("ColorMap", "enable",),
+    [
+        [ "HeightBlending", ],
+        [
+            "enable", 
+            "layer0_scale",
+            "layer1_scale",
+            "layer2_scale",
+            "layer3_scale",
+        ],
+    ],
+    [
+        [ "Environment" ],
+        [
+            "CullingDistanceOverride",
+            "DevMark",
+            "Lighting",
+            "Renderer",
+            "ShadowBlur",
+            "ShadowColor",
+            "UseAlphaBlend",
+        ],
+    ],
+    [
+        [ "FoW", ],
+        [
+            "color_red",
+            "color_green",
+            "color_blue",
+            "upscale",
+        ],
+    ],
+    [
+        [ "Fog", ],
+        [
+            "red",
+            "green"
+            "blue",
+            "opacity",
+            "min_height",
+            "max_height",
+            "min_radius",
+            "max_radius",
+            "min_opaque_height",
+            "max_opaque_height", 
+            "useOpacityMap",
+            "enable",
+        ],
     ],
 # DATA/Globals/ABGroups.inibin
     [
@@ -485,6 +539,8 @@ all_inibin_fixlist = [
             "Health",
             "HealthRegen",
             "Jungle",
+            "Internal",
+            "Lane",
             "LifeSteal",
             "MagicPenetration",
             "Mana",
@@ -707,9 +763,9 @@ all_inibin_fixlist = [
             "AmmoCountHiddenInUI",
             "AmmoNotAffectedByCDR",
             "AmmoRechargeTime",
-            *[ "AmmoRechargeTime%d" % x for x in range(0, 7) ],
+            *[ "AmmoRechargeTime%d" % x for x in range(1, 7) ],
             "AmmoUsed",
-            *[ "AmmoUsed%d" % x for x in range(0, 7) ],
+            *[ "AmmoUsed%d" % x for x in range(1, 7) ],
             "AnimationLeadOutName",
             "AnimationLoopName",
             "AnimationName",
@@ -821,9 +877,9 @@ all_inibin_fixlist = [
             "LookAtPolicy",
             "LuaOnMissileUpdateDistanceInterval",
             "ManaCost",
-            *[ "ManaCost%d" % x for x in range(0, 8) ],
+            *[ "ManaCost%d" % x for x in range(1, 8) ],
             "MaxAmmo",
-            *[ "MaxAmmo%d" % x for x in range(0, 7) ],
+            *[ "MaxAmmo%d" % x for x in range(1, 8) ],
             "MaxGrowthRangeTextureName",
             "MaxGrowthLineBaseTextureName",
             "MaxGrowthLineTargetTextureName",
@@ -1366,8 +1422,14 @@ all_inibin_fixlist = [
         ]
     ],
     [
-        [ "RecItems", "TutorialRecItems" ],
+        [ 
+            "ItemSet1",
+            "ItemSet2",
+            "RecItems",
+            "TutorialRecItems",
+        ],
         [
+            "SetName",
             *[ "RecItem%d" % x for x in range(1, 7) ],
         ]
     ],

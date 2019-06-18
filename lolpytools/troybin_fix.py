@@ -20,9 +20,12 @@ def a_ihash(sections, names):
                 ret = ihash(name, sectionhash)
                 yield section, name, ret
 
-# flex('a') -> a_flex0, a_flex1, a_flex2, a_flex_3
 def flex(*args):
-    return [ "%s_flex%d" % (a,x) for a in args for x in range(0, 4) ]
+    return [
+        *[ "%s" % a for a in args ],
+        *[ "%s_flex" % a for a in args ],
+        *[ "%s_flex%d" % (a, x) for a in args for x in range(0,4) ],
+    ]
 
 def rand(mods, *args):
     return [
@@ -32,6 +35,13 @@ def rand(mods, *args):
         *[ "%s%sP%u" % (a,m,x) for a in args for m in mods \
             for x in range(0, RAND_VARS)
         ],
+    ]
+
+def flex_float(*args):
+    return [
+        *[ "%s" % a for a in args ],
+        *[ "%s_flex" % a for a in args ],
+        *[ "%s_flex%d" % (a, x) for a in args for x in range(0,4) ],
     ]
 
 def rand_float(*args):
@@ -126,7 +136,7 @@ system_names = [
     "VoiceOverPersistent",
 ]
 
-group_names = [
+group_names = list({
     "ExcludeAttachmentType",
     "KeywordsExcluded",
     "KeywordsIncluded",
@@ -245,7 +255,7 @@ group_names = [
     "teamcolor-correction",
     "uniformscale",
     
-    *flex(
+    *flex_float(
         "p-scale", 
         "p-scaleEmitOffset",
     ),
@@ -324,7 +334,7 @@ group_names = [
     
     *part_field_names,
     *part_fluid_names,
-]
+})
 
 fluid_names = [
     "f-accel",
