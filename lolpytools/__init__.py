@@ -1,4 +1,4 @@
-from . import inibin
+from . import inibin2
 from . import convert
 from . import convert
 from . import inibin_fix

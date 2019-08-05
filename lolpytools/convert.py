@@ -1,5 +1,5 @@
 #!/bin/env python
-from . import inibin
+from . import inibin2
 from . import inibin_fix
 from . import troybin_fix
 from . import plua
@@ -25,13 +25,13 @@ def writeini(ibin, outfile):
 
 
 def inibin2ini(infile, outfile):
-    ibin = inibin.read(infile)
+    ibin = inibin2.read(infile)
     inibin_fix.fix(ibin)
     writeini(ibin, outfile)
 
 
 def troybin2troy(infile, outfile):
-    ibin = inibin.read(infile)
+    ibin = inibin2.read(infile)
     troybin_fix.fix(ibin)
     writeini(ibin, outfile)
 
