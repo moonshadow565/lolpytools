@@ -158,6 +158,12 @@ all_inibin_fixlist = [
             "World",
         ],
     ],
+    [
+        [ "SimpleEnvironment" ],
+        [
+            "HighlightColor",
+        ]
+    ],
 # LEVELS/MapX/Mission.inibin
     [
         [ 
@@ -657,6 +663,10 @@ all_inibin_fixlist = [
             "NumStates",
             "ShowPAR",
             "ShowRegen",
+            "State0Color",
+            *[ "State%dColor" % x for x in range(0, 3) ],
+            *[ "State%dFadeColor" % x for x in range(0, 3) ],
+            *[ "State%dVideoPrefix" % x for x in range(0, 3) ],
         ],
     ],
 # DATA/Menu_SC4/HUD.inibin
@@ -671,6 +681,25 @@ all_inibin_fixlist = [
             "TowerBorder",
             "TowerFill",
             "TowerIcon",
+        ],
+    ],
+    [
+        [ 
+            "Texture",
+            *[ "Texture%d" % x for x in range(0, 4) ],
+        ],
+        [
+            "Bot",
+            "Mid",
+            "Top",
+        ],
+    ],
+    [
+        [ "Position" ],
+        [
+            "BaseOffsetFromEdge",
+            "LaneOffsetFromTopOfScreen",
+            "SizeOfTowerDisplay",
         ],
     ],
 # DATA/Menu_SC4/GeneralCharacterData.inibin
@@ -698,6 +727,9 @@ all_inibin_fixlist = [
     [
         [ "Data", ],
         [
+            *[ "Badge%d_ID" % x for x in range(0, 4) ],
+            *[ "Badge%dTexU" % x for x in range(0, 4) ],
+            *[ "Badge%dTexV" % x for x in range(0, 4) ],
             "BackgroundTexBotU",
             "BackgroundTexBotV",
             "BackgroundTexChaosOffset",
@@ -707,7 +739,6 @@ all_inibin_fixlist = [
             "BadgeBorderTexU",
             "BadgeBorderTexV",
             "BadgeBorderTexWidth",
-            "BadgeTexHeight",
             "BadgeBorderTexU",
             "BadgeBorderTexV",
             "BadgeBorderTexWidth",
@@ -1077,15 +1108,15 @@ all_inibin_fixlist = [
             "DynamicExtended",
             "DynamicTooltip",
             "DeathRecapPriority",
-            *[ "Effect%dLevel%dAmount" % (x, y) for x in range(0, 17) for y in range(0, 7) ],
-            *[ "FloatStaticsDecimals%d" % x for x in range(0, 17) ],
-            *[ "FloatVarsDecimals%d" % x for x in range(0, 17) ],
+            *[ "Effect%dLevel%dAmount" % (x, y) for x in range(1, 10) for y in range(0, 7) ],
+            *[ "FloatStaticsDecimals%d" % x for x in range(1, 7) ],
+            *[ "FloatVarsDecimals%d" % x for x in range(1, 7) ],
             "HideDurationInUI",
             "InventoryIcon",
             "ShowInActiveItemDisplay",
             "ShowInTrackerUI",
             "Sound_VOEventCategory",
-        ]
+        ],
     ],
 # DATA/Items/metadata/categories.inibin
 # DATA/Items/ItemGroups/*.inibin
@@ -1102,7 +1133,7 @@ all_inibin_fixlist = [
     [
         [ "Builds" ],
         [
-            *[ "Item%d" % x for x in range(0, 17) ]
+            *[ "Item%d" % x for x in range(1, 18) ]
         ]
     ],
     [
@@ -1123,7 +1154,7 @@ all_inibin_fixlist = [
             "HealthRegen",
             "Jungle",
             "Internal",
-            *[ "Item%d" % x for x in range(1, 17) ],
+            *[ "Item%d" % x for x in range(1, 18) ],
             "Lane",
             "LifeSteal",
             "MagicPenetration",
@@ -1280,6 +1311,8 @@ all_inibin_fixlist = [
             "rPercentMovementSpeedModPerLevel",
             "rPercentTimeDeadMod",
             "rPercentTimeDeadModPerLevel",
+            * [ "Sidegrade%d" % x for x in range(1, 5) ],
+            "SidegradeCredit",
             "SellBackModifier",
             "ShowInActiveItemDisplay",
             "SpecialRecipe",
@@ -1463,8 +1496,8 @@ all_inibin_fixlist = [
             ]),
             "ExcludedUnitTags",
             "Flags",
-            *[ "FloatStaticsDecimals%d" % x for x in range(0, 17) ],
-            *[ "FloatVarsDecimals%d" % x for x in range(0, 17) ],
+            *[ "FloatStaticsDecimals%d" % x for x in range(1, 7) ],
+            *[ "FloatVarsDecimals%d" % x for x in range(1, 7) ],
             "HaveAfterEffect",
             "HaveHitBone",
             "HaveHitEffect",
@@ -1982,6 +2015,7 @@ all_inibin_fixlist = [
             *[ "Click%d" % x for x in range(1, 5) ],
             "Death",
             *[ "Move%d" % x for x in range(1, 5) ],
+            "SkinClassification",
             *[ "Special%d" % x for x in range(1, 5) ],
         ],
     ],
