@@ -16,9 +16,6 @@ def a_ihash(sections, names):
                 ret = ihash(name, sectionhash)
                 yield section, name, ret
 
-def s_n(s, *names):
-    return [ [s], [*names], ]
-
 all_gamemodes = [
     "ARAM",
     "CLASSIC",
@@ -29,11 +26,29 @@ all_gamemodes = [
     "ASCENSION",
     "URF",
 ]
+
 all_mutators = [
     *all_gamemodes,
+    "Default",
     "NightmareBots",
 ]
 
+all_stats = [
+    "MP",
+    "Mana",
+    "Battlefury",
+    "BloodWell",
+    "Dragonfury",
+    "Energy",
+    "Ferocity",
+    "Gnarfury",
+    "Heat",
+    "None",
+    "Other",
+    "Rage",
+    "Shield",
+    "Wind",
+]
 def map_vars(*args):
     return [
         *args,
@@ -42,6 +57,37 @@ def map_vars(*args):
 
 
 all_inibin_fixlist = [
+# LEVELS/MapX/Audio.inibin
+    [
+        [ 
+            "Default",
+            *[ 'GameMode_%s' % m for m in all_gamemodes ],
+        ],
+        [
+            "AmbientEvent",
+            "DefeatMusic",
+            "ReverbPreset",
+            "ThemeMusic",
+            "VictoryMusic",
+        ],
+    ],
+    [
+        [ "SoundBanks", ],
+        [
+            "EventLookupTable",
+            "NumOfSoundBanks",
+        ],
+    ],
+# LEVELS/MapX/clouds.inibin
+    [
+        [ "Clouds", ],
+        [
+            "SpeedU",
+            "SpeedV",
+            "Texture",
+            "Tile",
+        ],
+    ],
 # LEVELS/MapX/DeathTimes.inibin
     [
         [ "DeathTimeScaling" ],
@@ -84,11 +130,78 @@ all_inibin_fixlist = [
         [ 
             "ItemInclusionList",
             "UnpurchasableItemList",
+            "UnpurchasableItemListTutorial",
             *[ "UnpurchasableItemList_%s" % x for x in all_mutators ],
         ],
         [
             *[ "Item%d" % x for x in range(0, 200) ]
         ]
+    ],
+# LEVELS/MapX/Gamma.inibin
+    [
+        [ "Gamma", ],
+        [
+            "Brightness",
+            "Contrast",
+            "Gamma",
+            "Level",
+        ],
+    ],
+# LEVELS/MapX/Graphics.inibin
+    [
+        [ "TextureQuality" ],
+        [
+            "Default",
+            "Effects",
+            "Grass",
+            "Terrain",
+            "World",
+        ],
+    ],
+# LEVELS/MapX/Mission.inibin
+    [
+        [ 
+            "ExtraSummonerItem",
+            "ExtraSummonerItemTutorial",
+        ],
+        [ 
+            "Icon",
+            "ItemID",
+            "Tooltip",
+        ],
+    ],
+    [
+        [ "LoadScreen", ],
+        [ "ScreenToLoad" ],
+    ],
+    [
+        [ "BehaviorTreeMetaData" ],
+        [
+            "BehaviorTreeNodeLibraryCommon",
+            "BehaviorTreeNodeLibraryClient",
+        ],
+    ],
+    [
+        [ "General", ],
+        [
+            "RelativeColorization",
+            "StringID",
+        ],
+    ],
+# LEVELS/MapX/MonsterDataTableX.inibin
+    [
+        [ 
+            "AbilityPower", 
+            "AttackDamage",
+            "Armor",
+            "Experience",
+            "Gold",
+            "Health",
+            "MagicResist",
+        ],
+        [
+            *[ "Level%d" % x for x in range(0, 20) ],
+        ],
     ],
 # LEVELS/MapX/NeutralTimers.inibin
     [
@@ -157,6 +270,17 @@ all_inibin_fixlist = [
             "ScreenToLoad",
         ]
     ],
+# LEVELS/MapX/Particles.inibin
+    [
+        [ "FootSteps", ],
+        [
+            *[ "EffectName%d" % x for x in range(0,4) ],
+            "EmitterBone",
+            "EmitterRotation",
+            *[ "Key%d" % x for x in range(0,4) ],
+            *[ "State%d" % x for x in range(0,4) ],
+        ],
+    ],
 # LEVELS/MapX/StatsProgression.inibin
     [
         [ "PerLevelStatsFactor" ],
@@ -164,17 +288,37 @@ all_inibin_fixlist = [
             *[ "Level%d" % x for x in range(0, 31) ]
         ]
     ],
+# LEVELS/MapX/Shadow.inibin
+    [
+        [ "Shadow", ],
+        [
+            "ShadowBias",
+            "ShadowFadeMinY",
+            "ShadowFadeRange",
+        ],
+    ],
 # LEVELS/MapX/terrain.inibin
-    s_n("AlphaTest", "cut_off",),
-    s_n("ColorMap", "enable",),
+# LEVELS/MapX/envlighting.inibin
+    [
+        [ "AlphaTest", ],
+        [ 
+            "Cut_off",
+        ],
+    ],
+    [
+        [ "ColorMap", ],
+        [
+            "Enable", 
+        ],
+    ],
     [
         [ "HeightBlending", ],
         [
-            "enable", 
-            "layer0_scale",
-            "layer1_scale",
-            "layer2_scale",
-            "layer3_scale",
+            "Enable", 
+            "Layer0_scale",
+            "Layer1_scale",
+            "Layer2_scale",
+            "Layer3_scale",
         ],
     ],
     [
@@ -182,46 +326,81 @@ all_inibin_fixlist = [
         [
             "CullingDistanceOverride",
             "DevMark",
+            "DisablePointLights",
             "Lighting",
             "Renderer",
             "ShadowBlur",
             "ShadowColor",
+            "ShadowDynamicOnly",
             "UseAlphaBlend",
         ],
     ],
     [
         [ "FoW", ],
         [
-            "color_red",
-            "color_green",
-            "color_blue",
-            "upscale",
+            "Blend",
+            "BlurKernelSigma",
+            "Color_red",
+            "Color_green",
+            "Color_blue",
+            "Fade",
+            "FadeFinish",
+            "FadeStart",
+            "EdgeEnhancement",
+            "EdgeTintPoint",
+            "Upscale",
         ],
     ],
     [
         [ "Fog", ],
         [
-            "red",
-            "green"
-            "blue",
-            "opacity",
-            "min_height",
-            "max_height",
-            "min_radius",
-            "max_radius",
-            "min_opaque_height",
-            "max_opaque_height", 
-            "useOpacityMap",
-            "enable",
+            "Red",
+            "Green",
+            "Blue",
+            "Opacity",
+            "Min_height",
+            "Max_height",
+            "Min_radius",
+            "Max_radius",
+            "Min_opaque_height",
+            "Max_opaque_height", 
+            "UseOpacityMap",
+            "Enable",
+        ],
+    ],
+# DATA/Images/UI/GameBar
+    [
+        [ "Animation" ],
+        [
+            "AnimationTime",
+            "FrameCount",
+        ],
+    ],
+    [
+        [ "Frames", ],
+        [
+            *[ "Frame%d" % x for x in range(0, 25) ],
         ],
     ],
 # DATA/Globals/ABGroups.inibin
     [
-        [
-            "Settings",
-        ],
+        [ "Settings", ],
         [
             "EnabledGroups",
+        ],
+    ],
+    [
+        [ "Control", ],
+        [
+            "Weight",
+            "Features",
+        ],
+    ],
+    [
+        [ "Everything", ],
+        [
+            "Weight",
+            "Features",
         ],
     ],
 # DATA/Globals/Critical.inibin
@@ -298,6 +477,31 @@ all_inibin_fixlist = [
             "TimeToMaxValueInSeconds",
             "TimeToMinValueInSeconds",
         ]
+    ],
+    [
+        [ "DeathStreak", ],
+        [
+            "DeathStreakPenalty",
+            "MinDeathsForStreak",
+            "MinDeathStreakPenalty",
+        ],
+    ],
+    [
+        [ "KillStreak", ],
+        [
+            "KillStreakBonus",
+            "MaxKillStreakBonus",
+            "MinKillsForStreak",
+        ],
+    ],
+# DATA/Globals/ColorSettings.inibin
+    [
+        [ "ColorChaos", "ColorOrder", ],
+        [
+            "PlayerColorHighlightBlue",
+            "PlayerColorHighlightGreen",
+            "PlayerColorHighlightRed",
+        ],
     ],
 # DATA/Globals/*_Stats.inibin
     [
@@ -402,6 +606,18 @@ all_inibin_fixlist = [
             "NEUTRAL_MINIONS_KILLED_ENEMY_JUNGLE",
         ],
     ],
+    [
+        [ "MoveSpeed", ],
+        [
+            "MajorMovePenaltyCoefficient",
+            "MajorMovePenaltyThreshold",
+            "MinorMovePenaltyCoefficient",
+            "MinorMovePenaltyThreshold",
+            "SlowMovePenaltyCoefficient",
+            "SlowMovePenaltyThreshold",
+            "WallPathingFactor",
+        ],
+    ],
 # DATA/Globals/Quests.inibin
     [
         [
@@ -434,55 +650,412 @@ all_inibin_fixlist = [
             "NCoefficient",
         ]
     ],
+# DATA/Menu_SC4/PARStates.inibin
+    [
+        [ *all_stats ],
+        [
+            "NumStates",
+            "ShowPAR",
+            "ShowRegen",
+        ],
+    ],
+# DATA/Menu_SC4/HUD.inibin
+    [
+        [ "Texture", ],
+        [
+            "BaseBorder",
+            "ButtonBG",
+            "BaseFill",
+            "BaseIcon",
+            "IndicatorBG",
+            "TowerBorder",
+            "TowerFill",
+            "TowerIcon",
+        ],
+    ],
+# DATA/Menu_SC4/GeneralCharacterData.inibin
+# TODO: Do we need this?
+    [
+        [ "AttackData", ],
+        [ "AttackAutoInterruptPercent", ],
+    ],
+    [
+        [ "GeneralDataHero", ],
+        [ 
+            "DefaultBoundingCylinderHeight",
+            "DefaultBoundingCylinderRadius",
+            "DefaultBoundingSphereRadius",
+            "DefaultChampionCollisionRadius",
+            "DefaultHealthPerMegaTick",
+            "DefaultHealthPerTick",
+            "FadeTimerForHealthBar",
+            "FullHealthAlpha",
+            "MaxHealthTicks",
+            "ZeroHealthAlpha",
+        ],
+    ],
+# DATA/LoadingScreen/
+    [
+        [ "Data", ],
+        [
+            "BackgroundTexBotU",
+            "BackgroundTexBotV",
+            "BackgroundTexChaosOffset",
+            "BackgroundTexU",
+            "BackgroundTexV",
+            "BadgeBorderTexHeight",
+            "BadgeBorderTexU",
+            "BadgeBorderTexV",
+            "BadgeBorderTexWidth",
+            "BadgeTexHeight",
+            "BadgeBorderTexU",
+            "BadgeBorderTexV",
+            "BadgeBorderTexWidth",
+            "BadgeTexHeight",
+            "BadgeTexWidth",
+            *[ "BarTextUVs%du%d" % (x,y) for x in range(0, 4) for y in range(1,3) ],
+            *[ "BarTextUVs%dv%d" % (x,y) for x in range(0, 4) for y in range(1,3) ],
+            *[
+                f % x for f in [
+                    "Badge%dTexU",
+                    "Badge%dTexV",
+                    "Badge%d_ID",
+                ] for x in range(0, 4)
+            ],
+            "BlackBoxHeight",
+            "BlackBoxWidth",
+            "BlackBoxX",
+            "BlackBoxY",
+            "CardBarHeightFactor",
+            "CardBarWidthFactor",
+            "CardBarXFactor",
+            "CardBarYFactor",
+            "CardHeightFixed",
+            "CardWidthFixed",
+            "ChampionBoxHeight",
+            "ChampionBoxWidth",
+            "ChampionBoxX",
+            "ChampionBoxY",
+            "ChampionCardHeightPercentage",
+            "ChampionCardHorizontalLayout",
+            "ChampionNameHeight",
+            "ChampionNameHeightForLongString",
+            "ChampionNameHeightHeightForLongString",
+            "ChampionNameOffset",
+            "ChampionTextBoxHeight",
+            "ChampionTextBoxWidth",
+            "ChampionTextBoxX",
+            "ChampionTextBoxY",
+            "ChaosCardHeightPercentage",
+            "ChaosCardWidthPercentage",
+            "ChaosCardXPercentage",
+            "ChaosCardYPercentage",
+            "DebugNumberOnChoas",
+            "DebugNumberOnOrder",
+            "DebugPing",
+            "EnableVs",
+            "Image",
+            "ImageHeight",
+            "ImageWidth",
+            "LiveUpdate",
+            "LongChampionName",
+            "MessageOffsetX",
+            "MessageOffsetY",
+            "OrderCardHeightPercentage",
+            "OrderCardWidthPercentage",
+            "OrderCardXPercentage",
+            "OrderCardYPercentage",
+            "PercentageCompleteNoPingTextY",
+            "PercentageCompleteTextX",
+            "PercentageCompleteTextY",
+            "PercentageMarginBetweenCardsX",
+            "PercentageOfScreenBottomMargin",
+            "PercentageOfScreenMiddleMargin",
+            "PercentageOfScreenTopMargin",
+            "PingBarMarginX",
+            "PingBarMarginY",
+            "PingBoxHeightFactor",
+            "PingBoxOffsetFactorX",
+            "PingBoxOffsetFactorY",
+            "PingBoxWidthFactor",
+            "ProfileIconHeightFactor",
+            "ProfileIconOffsetFactorX",
+            "ProfileIconOffsetFactorY",
+            "ProfileIconWidthFactor",
+            "ProgressbarBorderTexBotU",
+            "ProgressbarBorderTexBotV",
+            "ProgressbarBorderTexChaosOffset",
+            "ProgressbarBorderTexU",
+            "ProgressbarBorderTexV",
+            "ProgressbarTexBotU",
+            "ProgressbarTexBotV",
+            "ProgressbarTexChaosOffset",
+            "ProgressbarTexU",
+            "ProgressbarTexV",
+            "ProgressTextX",
+            "ProgressTextY",
+            "RankingsTextureAtlas",
+            "RankingsTextureX",
+            "RankingsTextureY",
+            "SummonerNameHeight",
+            "SummonerNameOffset",
+            "SummonorBoxHeight",
+            "SummonorBoxWidth",
+            "SummonorSpellBox2X",
+            "SummonorSpellBoxX",
+            "SummonorSpellBoxY",
+            "TeamsTextHeight",
+            "TextureHeight",
+            "TextureName",
+            "Textures",
+            "TextureWidth",
+            "TextWidth",
+            "TipsTextHeight",
+            "UseSkinNames",
+            "VsBorderTexBotU",
+            "VsBorderTexBotV",
+            "VsBorderTexU",
+            "VsBorderTexV",
+            "VsHeightFactor",
+            "VsWidthFactor",
+        ],
+    ],
+    [
+        [ "VS", ],
+        [
+            "FontOutlineSize",
+            "XPosPercentOfScreen",
+            "YPosPercentOfScreen",
+            "Scale",
+        ],
+    ],
+    [
+        [ "Background", ],
+        [
+            "ActualSizeHeight",
+            "ActualSizeWidth",
+            "Image",
+            "ImageHeight",
+            "ImageWidth",
+            "LetterBoxBorderPercentage",
+            "LoadBarHeightPercent",
+            "LoadBarWidthPercent",
+            "PercentLoadBarFromBottom",
+            "SlowAutoReload",
+        ],
+    ],
+    [
+        [ 
+            "GameMode",
+            "Large",
+            "ObjectiveText",
+            "Ping",
+            "Progress",
+            "Small",
+            "SmallForLongSkinNames",
+            "Teams",
+            "Title",
+            "Tips",
+        ],
+        [
+            "Bold",
+            "ColorIn",
+            "ColorInChaos",
+            "ColorInOrder",
+            "ColorInGreen",
+            "ColorInOrange",
+            "ColorInRed",
+            "ColorInYellow",
+            "ColorOut",
+            "ColorOutChaos",
+            "ColorOutOrder",
+            "Font",
+            "FontColorIn",
+            "FontColorOut",
+            "FontColorShadow",
+            "FontOutlineSize",
+            "FontResourceFile",
+            "FontSize",
+        ],
+    ],
+    [
+        [ "FirstBlood", ],
+        [
+            "HBuffer",
+            "HOffset",
+            "Image",
+            "ImageHeight",
+            "ImageWidth",
+            "VOffset",
+        ],
+    ],
+    [
+        [ "Teams", ],
+        [
+            "RegionChaosX",
+            "RegionChaosY",
+            "RegionOrderX",
+            "RegionOrderY",
+        ],
+    ],
+    [ 
+        [ "ObjectiveText", ],
+        [
+            *[ "Objective%dLine%d" % (x,y) for x in range(1, 6) for y in range(1,3) ],
+            "TimeBetweenMessagesSeconds",
+        ],
+    ],
+    [
+        [ "Ping", ],
+        [
+            "PingThresholdGreen",
+            "PingThresholdOrange",
+            "PingThresholdRed",
+            "PingThresholdYellow",
+        ],
+    ],
+    [
+        [ "Progress", ],
+        [
+            "ForGroundProgressBarXOffset",
+            "TextOffsetX",
+            "TextOffsetXShadow",
+            "TextOffsetY",
+            "TextOffsetYShadow",
+        ],
+    ],
+    [
+        [ "Title", ],
+        [ 
+            "Text",
+            "TitleOffScreenOffsetXPercent",
+            "TitleScreenOffsetXPercent",
+            "TitleScreenOffsetYPercent",
+        ],
+    ],
+    [
+        [ "TipsLeft", "TipsPBI", "TipsRight", ],
+        [
+            "RegionHeight",
+            "RegionWidth",
+            "RegionX",
+            "RegionY",
+            "TipsListFile",
+            "TipsListSection",
+            "TipsType",
+        ],
+    ],
+    [
+        [ *all_mutators ],
+        [
+            "Image",
+            "DifficultyIconImage",
+            "BotDifficultyY",
+            "BotDifficultyX",
+            "BotDifficultyHeight",
+            "BotDifficultyWidth",
+            "GameModeTextX",
+            "BotDifficultySpacing",
+            "GameModeTextHeight",
+            "GameModeTextY",
+        ],
+    ],
+    [
+        [ 
+            *[ "Texture%d" % x for x in range(0, 6) ], 
+        ],
+        [
+            "Name",
+            "Width",
+            "Height",
+            "Left",
+        ],
+    ],
+# DATA/Levels/
+    [
+        [ "Data", ],
+        [
+            "MapID",
+        ],
+    ],
 # DATA/Particles/ParticlesDefault.inibin
     [
         [ "GlobalEffects" ],
         [
-            "Default",
-            "MinionDeath",
-            "TurretDeath",
-            "ChaosBarracksDamper",
-            "OrderBarracksDamper",
+            "ChampionIndicator",
             "ChaosBarrackDeath",
-            "OrderBarrackDeath",
-            "LevelUp",
-            "HeroKilledByNeutral",
-            "HeroKilledByHero",
-            "HeroKilledByPlayer",
-            "HeroKilledAssistedByPlayer",
-            "HeroEnemyKilled",
-            "HeroAllyKilled",
-            "HeroRedKilledSpectator",
-            "HeroBlueKilledSpectator",
-            "HeroRespawn",
+            "ChaosBarracksDamper",
+            "ChaosBarracksDamperRespawn",
+            "ChaosBarracksPoweredUp",
+            "ChaosBarracksSpawn",
+            "ChaosBuildingDeath",
+            "ChaosHQDeath",
+            "ChaosHQDeath2",
+            "ChaosSpawnTurretBeam",
+            "ComeHere",
+            "CommandGround",
+            "CommandTarget",
+            "CursorCast",
+            "CursorEnemyCastConfirm",
+            "CursorEnemyCastConfirmLarge",
+            "CursorFriendlyCastConfirm",
+            "CursorFriendlyCastConfirmLarge",
+            "CursorHoverEnemyUnit",
+            "CursorHoverEnemyUnitLarge",
+            "CursorHoverFriendlyUnit",
+            "CursorHoverFriendlyUnitLarge",
             "CursorMoveTo",
             "CursorMoveToRed",
-            "CursorCast",
-            "FountainHeal",
-            "FocusTarget",
-            "DefendTarget",
-            "CommandTarget",
-            "CommandGround",
-            "ComeHere",
-            "OMW",
-            "Retreat",
+            "CursorSelectedEnemyUnit",
+            "CursorSelectedEnemyUnitLarge",
+            "CursorSelectedFriendlyUnit",
+            "CursorSelectedFriendlyUnitLarge",
             "Danger",
-            "MIA",
+            "Default",
+            "DefendTarget",
+            * [ "EffectName%d" % x for x in range(0, 40) ],
+            "EnemyMinionDeath",
+            "EnemyTurretDeath",
+            "FocusTarget",
+            "FountainHeal",
+            * [ "FileName%d" % x for x in range(0, 40) ],
+            "FriendlyMinionDeath",
+            "FriendlyTurretDeath",
             "GoldAcquisition",
+            "HeroAllyKilled",
+            "HeroBlueKilledSpectator",
+            "HeroEnemyKilled",
+            "HeroKilledAssistedByPlayer",
+            "HeroKilledByHero",
+            "HeroKilledByNeutral",
+            "HeroKilledByPlayer",
+            "HeroRedKilledSpectator",
+            "HeroRespawn",
+            * [ "Key%d" % x for x in  range(0, 40) ],
+            "LaserSightBeam",
+            "LevelUp",
+            "MIA",
+            "MaxIdentifier",
+            "MinionDeath",
             "MissingInstant",
             "MissingLingering",
-            "StartHeroSpawn",
-            "ChaosHQDeath",
+            "OMW",
+            "OrderBarrackDeath",
+            "OrderBarracksDamper",
+            "OrderBarracksDamperRespawn",
+            "OrderBarracksPoweredUp",
+            "OrderBarracksSpawn",
+            "OrderBuildingDeath",
             "OrderHQDeath",
-            "ChampionIndicator",
-            "MaxIdentifier",
-            * [ "EffectName%d" % x for x in range(0, 40) ],
-            * [ "FileName%d" % x for x in range(0, 40) ],
-            * [ "Key%d" % x for x in  range(0, 40) ],
+            "OrderHQDeath2",
+            "OrderLaserSightBeam",
+            "OrderSpawnTurretBeam",
+            "Retreat",
+            "StartHeroSpawn",
             * [ "State%d" % x for x in range(0, 40) ],
+            "TurretDeath",
         ],
     ],
-
 # DATA/Characters/HeroSpawnOffsets.inibin
     [
         [
@@ -509,13 +1082,23 @@ all_inibin_fixlist = [
             *[ "FloatVarsDecimals%d" % x for x in range(0, 17) ],
             "HideDurationInUI",
             "InventoryIcon",
+            "ShowInActiveItemDisplay",
             "ShowInTrackerUI",
             "Sound_VOEventCategory",
         ]
     ],
-# DATA/Items/metadadata/categories.inibin
+# DATA/Items/metadata/categories.inibin
 # DATA/Items/ItemGroups/*.inibin
 # DATA/Items/X.inibin
+    [
+        [ "Attack", ],
+        [
+            "AttackSpeed",
+            "CriticalStrike",
+            "Damage",
+            "LifeSteal",
+        ]
+    ],
     [
         [ "Builds" ],
         [
@@ -540,6 +1123,7 @@ all_inibin_fixlist = [
             "HealthRegen",
             "Jungle",
             "Internal",
+            *[ "Item%d" % x for x in range(1, 17) ],
             "Lane",
             "LifeSteal",
             "MagicPenetration",
@@ -636,6 +1220,7 @@ all_inibin_fixlist = [
             "PercentCritDamageMod",
             "PercentDodgeMod",
             "PercentEXPBonus",
+            "PercentHardnessMod",
             "PercentHealingAmountMod",
             "PercentHPPoolMod",
             "PercentHPRegenMod",
@@ -659,6 +1244,7 @@ all_inibin_fixlist = [
             "PercentTenacityRuneMod",
             "PlatformEnabled",
             "Price",
+            "PurchaseCooldown",
             *[ "RecipeItem%d" % x for x in range(0, 10) ],
             "RequiredChampion",
             *[ "RequiredItem%d" % x for x in range(0, 10) ],
@@ -729,6 +1315,40 @@ all_inibin_fixlist = [
             ],
         ]
     ],
+    [
+        [ "Movement", ],
+        [
+            "Boots",
+            "NonbootsMovement",
+        ],
+    ],
+    [ 
+        [ "Start", ],
+        [
+            "Jungle", 
+            "Lane",
+        ],
+    ],
+    [
+        [ "Defense", ],
+        [
+            "Armor",
+            "Health",
+            "HealthRegen",
+            "SpellBlock",
+            "Tenacity",
+        ],
+    ],
+    [
+        [ "Magic", ],
+        [
+            "SpellVamp",
+            "Mana",
+            "ManaRegen",
+            "CooldownReduction",
+            "SpellDamage",
+        ],
+    ],
 # DATA/Spells/X.inibin, 
 # DATA/Shared/Spells/X.inibin, 
 # DATA/Characters/Y/Spells/X.inibin,
@@ -743,6 +1363,10 @@ all_inibin_fixlist = [
     [
         [ "Data", ],
         [
+            "Cooldown",
+            *[ "Level%dDesc" % x for x in range(1, 6) ],
+            *[ "ManaCost%d" % x for x in range(1, 6) ],
+            "Range",
             "SpellDelayCastTime",
             "SpellDelayTotalTime",
         ],
@@ -758,6 +1382,7 @@ all_inibin_fixlist = [
             "AIRange",
             "AISendEvent",
             "AISpeed",
+            "AllowWhileTaunted",
             "AlternateName",
             "AlwaysSnapFacing",
             "AmmoCountHiddenInUI",
@@ -804,6 +1429,7 @@ all_inibin_fixlist = [
             *[ "CastRangeGrowthMax%d" % x for x in range(0, 7) ],
             "CastRangeTextureOverrideName",
             "CastRangeUseBoundingBoxes",
+            "CastRangeUseMapScaling",
             "CastTargetAdditionalUnitsRadius",
             "CastType",
             "ChannelDuration",
@@ -819,6 +1445,7 @@ all_inibin_fixlist = [
             *map_vars(*[ "Cooldown%d" % x for x in range(0, 7) ]),
             "CursorChangesInGrass",
             "CursorChangesInTerrain",
+            "DeathRecap",
             "DeathRecapPriority",
             "DelayCastOffsetPercent",
             "DelayTotalTimePercent",
@@ -911,11 +1538,14 @@ all_inibin_fixlist = [
             "OrientRadiusTextureFromPlayer",
             "OrientRangeIndicatorToCursor",
             "OrientRangeIndicatorToFacing",
+            "OverrideForceSpellAnimation",
+            "OverrideForceSpellCancel",
             "OverrideCastTime",
             "ParticleStartOffset",
             "PhysicalDamageRatio",
             "PlatformEnabled",
             "PointEffectName",
+            "PreventChargingSecondCast",
             "Ranks",
             "RangeIndicatorTextureName",
             "RequiredUnitTags",
@@ -1069,6 +1699,18 @@ all_inibin_fixlist = [
     ],
 # DATA/Characters/X/X.inibin
 # DATA/Characters/Y/Skins/X/X.inibin
+    [
+        [ "System", ],
+        [
+            "Enabled", 
+        ],
+    ],
+    [
+        [ "HealthBar", ],
+        [
+            "ShowTicks", 
+        ],
+    ],
     [
         [ "ContextualAction" ],
         [
@@ -1233,6 +1875,7 @@ all_inibin_fixlist = [
             "ShouldFaceTarget",
             "Significance",
             "SkipDrawOutline",
+            "SkipDrawToonInking",
             "SoulGivenOnDeath",
             *[ s % x for x in range(1, 5) for s in [
                     "Spell%d",
@@ -1332,6 +1975,16 @@ all_inibin_fixlist = [
             "RandomizeIdleAnimPhase",
         ]
     ],
+    [ 
+        [ "MeshSkin", ],
+        [
+            *[ "Attack%d" % x for x in range(1, 5) ],
+            *[ "Click%d" % x for x in range(1, 5) ],
+            "Death",
+            *[ "Move%d" % x for x in range(1, 5) ],
+            *[ "Special%d" % x for x in range(1, 5) ],
+        ],
+    ],
     [
         [ *[ "MeshSkin{}".format(x if x > 0 else "") for x in range(0, 30) ] ],
         [
@@ -1350,6 +2003,7 @@ all_inibin_fixlist = [
             "FresnelBlue",
             "FresnelGreen",
             "FresnelRed",
+            "GameplayCollisionRadius",
             "GlossTexture",
             "GlowFactor",
             "HPPerTick",
@@ -1370,6 +2024,7 @@ all_inibin_fixlist = [
             "MaterialOverrideTransMap",
             "MaterialOverrideTransSource",
             "MaterialOverridePriority",
+            "MaxNumBlendWeights",
             "OverrideBoundingBox",
             "ParallaxOffset",
             "ParticleOverride_ChampionKillDeathParticle",
@@ -1388,9 +2043,12 @@ all_inibin_fixlist = [
             "SkinScale",
             "SkinAudioNameOverride",
             "SkipVOOverride",
+            "SubmeshMouseOversToHide",
             "SubmeshesToHide",
+            "SubmeshShadowsToHide",
             "Texture",
             "TextureLow",
+            "UseChildAnimationOverride",
             "UsesSkinVO",
             "UnitBarKey",
             "VOOverride",
@@ -1466,14 +2124,35 @@ all_inibin_fixlist = [
             "MinionUseable",
             "MinionUseSpell",
         ]
-    ]
+    ],
+    [
+        [ "Shader", ],
+        [
+            "HasTangent",
+            "Pixel",
+            "Vertex",
+        ],
+    ],
 ]
 
 all_inibin_fixdict = {
     h: (s, n) for sn in all_inibin_fixlist for s,n,h in a_ihash(*sn)
 }
 
-def get_fixdict(inib):
+def verify_fixdict():
+    results = {}
+    for sn in all_inibin_fixlist:
+        for s,n,h in a_ihash(*sn):
+            if h in results:
+                s1, n1 = results[h][0].lower(), results[h][1].lower()
+                s2, n2 = s.lower(), n.lower()
+                if (s1,n1) != (s2, n2):
+                    raise ValueError(f"Collision: {s1}*{n1} vs {s2}*{n2}")
+            else:
+                results[h] = (s,n)
+    
+
+def get_fixdict(inib = None):
     return all_inibin_fixdict
 
 # unhashes .inibin with dictionary
