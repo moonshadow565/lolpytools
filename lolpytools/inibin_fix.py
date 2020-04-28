@@ -25,12 +25,21 @@ all_gamemodes = [
     "TUTORIAL",
     "ASCENSION",
     "URF",
+    "ASSASSINATE",
+    "DARKSTAR",
+    "SIEGE",
+    "STARGUARDIAN",
+    "KingPoro",
 ]
 
 all_mutators = [
     *all_gamemodes,
+    "Bilgewater",
+    "Clarity",
     "Default",
     "NightmareBots",
+    "NightmareBotsDebug",
+    "TagTeam",
 ]
 
 all_stats = [
@@ -56,7 +65,10 @@ def map_vars(*args):
         *[ "Map%d_%s" % (x,a) for a in args for x in range(0, 15) ],
     ]
 
+#FIXME: Blacklisted stuff: "UnitBarData", "MapObjects", "GeneralCharacterData"
+
 all_inibin_fixlist = [
+# TODO: LEVELS/MapX/AtmosphereMutators.inibin (Atmosphere*mutators)
 # LEVELS/MapX/Audio.inibin
     [
         [ 
@@ -285,6 +297,18 @@ all_inibin_fixlist = [
             *[ "State%d" % x for x in range(0,4) ],
         ],
     ],
+# LEVELS/MapX/PerSide.inibin
+    [
+        [ "Camera", ],
+        [
+            "ChaosXOffset",
+            "ChaosYOffset",
+            "ChaosZOffset",
+            "OrderXOffset",
+            "OrderYOffset",
+            "OrderZOffset",
+        ],
+    ],
 # LEVELS/MapX/StatsProgression.inibin
     [
         [ "PerLevelStatsFactor", ],
@@ -292,7 +316,7 @@ all_inibin_fixlist = [
             *[ "Level%d" % x for x in range(0, 31) ]
         ]
     ],
-# LEVELS/MapX/Shadow.inibin
+# LEVELS/MapX/ShadowSettings.inibin
     [
         [ "Shadow", ],
         [
@@ -414,7 +438,23 @@ all_inibin_fixlist = [
             *[ "Critical%d" % c for c in range(0, 201) ],
         ],
     ],
-# Data/Globals/Tips.inibin
+# DATA/Globals/ExcludedItems.inibin
+    [
+        [ "ExcludedItems", ],
+        [
+            # TODO: find upper limit
+            *[ "ExcludedItem%d" % x for x in range(1, 200) ],
+        ],
+    ],
+# DATA/Globals/LimitedQuanitityItems.inibin
+    [
+        [ "LimitedQuanitityItems", ],
+        [
+            # TODO: find upper limit
+            *[ "LQItem%d" % x for x in range(1, 200) ],
+        ],
+    ],
+# DATA/Globals/Tips.inibin
     [
         [
             "Global",
@@ -441,7 +481,7 @@ all_inibin_fixlist = [
             *all_mutators,
         ],
         [
-            *[ "Mutator%d" % x for x in range(0, 10) ],
+            *[ "Mutator%d" % x for x in range(0, 13) ],
         ],
     ],
 # DATA/Globals/Bounty.inibin
@@ -998,6 +1038,7 @@ all_inibin_fixlist = [
             "Width",
             "Height",
             "Left",
+            "Top",
         ],
     ],
 # DATA/Levels/
@@ -1005,6 +1046,9 @@ all_inibin_fixlist = [
         [ "Data", ],
         [
             "MapID",
+            "TutorialEnabled",
+            "TutorialOnly",
+            "TotalPlayers",
         ],
     ],
 # DATA/Particles/ParticlesDefault.inibin
@@ -1103,6 +1147,7 @@ all_inibin_fixlist = [
             "AlternateName",
             "ApplyMaterialOnHitSound",
             "DisplayName",
+            "Description",
             "DynamicExtended",
             "DynamicTooltip",
             "DeathRecapPriority",
@@ -1183,6 +1228,7 @@ all_inibin_fixlist = [
             "Consumed",
             "CooldownShowDisabledDuration",
             "Description",
+            "DisabledDescriptionOverride",
             "DisappersOnDeath",
             "DisplayName",
             "DropsOnDeath",
@@ -1368,7 +1414,7 @@ all_inibin_fixlist = [
 # DATA/Spells/X.inibin, 
 # DATA/Shared/Spells/X.inibin, 
 # DATA/Characters/Y/Spells/X.inibin,
-# DATa/Talents/X.inibin
+# DATA/Talents/X.inibin
     [
         [ "SpawningUI", ],
         [
@@ -1562,6 +1608,7 @@ all_inibin_fixlist = [
             "Ranks",
             "RangeIndicatorTextureName",
             "RequiredUnitTags",
+            "ShowInTrackerUI",
             "SelectionPreference",
             "Sound_CastName",
             "Sound_HitName",
@@ -1654,7 +1701,9 @@ all_inibin_fixlist = [
                     "_OrientationType",
                 ]
             ],
+            "AlternateName",
             "AlwaysDraw",
+            *[ "CastRange%d" % x for x in range(0, 7) ],
             "Center",
             "ConeAngle",
             "ConeRange",
@@ -1670,6 +1719,11 @@ all_inibin_fixlist = [
             "IsClockwiseArc",
             "Length",
             *[ "Length%d" % x for x in range(0,7) ],
+            "LineMissileCollisionFromStartPoint",
+            "LineMissileDelayDestroyAtEndSeconds",
+            "LineMissileEndsAtTargetPoint",
+            "LineMissileTimePulseBetweenCollisionSpellHits",
+            "LineMissileTrackUnits",
             "LineStopsAtEndPosition",
             "LineTargetingTargetTextureOverrideName",
             "LineTargetingBaseTextureOverrideName",
@@ -1679,15 +1733,21 @@ all_inibin_fixlist = [
             "MinAngle",
             "MinAngleRangeFactor",
             "MinimumDisplayedRange",
+            "MissilePerceptionBubbleRadius",
+            "MissilePerceptionBubbleRevealsStealth",
             "OverrideBaseRange",
             *[ "OverrideBaseRange%d" % x for x in range(0,7) ],
+            "OverrideForceSpellAnimation",
+            "OverrideForceSpellCancel",
             "OverrideRadius",
             *[ "OverrideRadius%d" % x for x in range(0,7) ],
+            "Range",
             "RangeGrowthDuration",
             *[ "RangeGrowthDuration%d" % x for x in range(0,7) ],
             "RangeGrowthMax",
             *[ "RangeGrowthMax%d" % x for x in range(0,7) ],
             "RangeIndicatorTextureName",
+            "SpellRevealsChampion",
             "Start",
             "TargettingType",
             "TextureBaseMaxGrow",
@@ -1728,6 +1788,7 @@ all_inibin_fixlist = [
         [ "ContextualAction", ],
         [
             "RuleConfigFile",
+            "UsesSkinVO",
         ],
     ],
     [
@@ -2045,10 +2106,12 @@ all_inibin_fixlist = [
             "MaterialOverrideTransSource",
             "MaterialOverridePriority",
             "MaxNumBlendWeights",
+            "Metadata",
             "OverrideBoundingBox",
             "ParallaxOffset",
             "ParticleOverride_ChampionKillDeathParticle",
             "ParticleOverride_DeathParticle",
+            "Ready",
             "ReflectionFresnel",
             "ReflectionFresnelBlue",
             "ReflectionFresnelGreen",
