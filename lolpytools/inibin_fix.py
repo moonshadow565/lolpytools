@@ -701,7 +701,7 @@ all_inibin_fixlist = [
             "NumStates",
             "ShowPAR",
             "ShowRegen",
-            "State0Color",
+            # TODO: GnarFurry has State5 ...
             *[ "State%dColor" % x for x in range(0, 3) ],
             *[ "State%dFadeColor" % x for x in range(0, 3) ],
             *[ "State%dVideoPrefix" % x for x in range(0, 3) ],
