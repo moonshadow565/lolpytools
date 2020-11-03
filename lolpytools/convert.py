@@ -8,35 +8,39 @@ import json
 def writeini(ibin, outfile):
     def write_value(name, value):
         if isinstance(value, str):
-            outfile.write('{}="{}"\n'.format(name, value))
+            outfile.write('{}={}\n'.format(name, json.dumps(value)))
         elif isinstance(value, bool):
             outfile.write('{}={}\n'.format(name, '1' if value else '0'))
         elif isinstance(value, list) or isinstance(value, tuple):
-            outfile.write('{}={}\n'.format(name, ' '.join([str(x) for x in value])))
-        else:
+            outfile.write('{}={}\n'.format(name, ' '.join([repr(x) for x in value])))
+        elif isinstance(value, int):
             outfile.write('{}={}\n'.format(name, value))
+        elif isinstance(value, float):
+            outfile.write('{}={}\n'.format(name, repr(value)))
+        else:
+            raise Exception("Unknown type: {}".format(type(value)))
     for section, names in sorted(ibin["Values"].items()):
         outfile.write('[{}]\n'.format(section))
         for name,value in sorted(names.items()):
             write_value(name, value)
         outfile.write('\n')
-    for name, value in sorted(ibin["UNKNOWN_HASHES"].items()):
-        write_value(";UNKNOWN_HASH {}".format(name), value)
-
+    if len(ibin["UNKNOWN_HASHES"]) > 0:
+        outfile.write('[UNKNOWN_HASHES]\n')
+        for name, value in sorted(ibin["UNKNOWN_HASHES"].items(), key=lambda kv: f'{kv[0]:08X}'):
+            write_value("unk{:08X}".format(int(name)), value)
 
 def inibin2ini(infile, outfile):
     ibin = inibin2.read(infile)
     inibin_fix.fix(ibin)
     writeini(ibin, outfile)
 
-
 def troybin2troy(infile, outfile):
     ibin = inibin2.read(infile)
     troybin_fix.fix(ibin)
     writeini(ibin, outfile)
 
-def luaobj2lua(infile, outfile):
-    g = plua.read(infile)["Values"]
+def writelua(lua, outfile):
+    g = lua["Values"]
     
     def verify_array(value):
         sz = len(value) + 1
@@ -51,11 +55,14 @@ def luaobj2lua(infile, outfile):
         if value is None:
             outfile.write("nil")
         elif isinstance(value, str):
-            outfile.write(json.dumps(value))
+            if value.startswith("~~"):
+                outfile.write(value[2:])
+            else:
+                outfile.write(json.dumps(value))
         elif isinstance(value, int):
             outfile.write(str(value))
         elif isinstance(value, float):
-            outfile.write(str(value))
+            outfile.write(repr(value))
         elif isinstance(value, bool):
             outfile.write("True" if value else "False")
         elif isinstance(value, dict):
@@ -82,3 +89,5 @@ def luaobj2lua(infile, outfile):
         write_value(gvalue, 0)
         outfile.write("\n")
         
+def luaobj2lua(infile, outfile):
+    writelua(plua.read(infile), outfile)

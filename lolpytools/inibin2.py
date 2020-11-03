@@ -3,6 +3,8 @@ import struct
 import io
 import math
 import re
+import os
+import sys
 
 #Hashes string if two given hashesh "section*name" (asterix included)
 def ihash(section, name = None):
@@ -45,13 +47,6 @@ def sanitize_str(data):
 #Reads inibin from binary buffer to dictionary(keys and values in strings)
 #Copies results to target and returns (optional argument)
 def read_2(buffer, target):
-    def read_flags(buffer, count):
-        result = []
-        bools = buffer.read(math.ceil(count/8))
-        for index in range(0, count):
-            result.append(bool((bools[index // 8] >> (index%8))  & 1))
-        return result
-
     def read_numbers(buffer, fmt, count = 1, mul = 1):
         result = {}
         num = struct.unpack("<H", buffer.read(2))[0]
@@ -72,15 +67,18 @@ def read_2(buffer, target):
         keys = []
         for x in range(0, num):
             keys.append(struct.unpack("<I", buffer.read(4))[0])
-        bools = read_flags(buffer, num)
+        bytes_count = num // 8 + (1 if num % 8 > 0 else 0)
+        bools = buffer.read(bytes_count)
+        assert(bytes_count == len(bools))
         for x in range(0, num):
-            result[keys[x]] = int(bools[x])         
+            result[keys[x]] = int(bool((bools[x // 8] >> (x % 8)) & 1))
         return result
 
     def read_strings(buffer, stringsLength, dumy=None):
         result = {}
         offsets = read_numbers(buffer, "<H")
         data = buffer.read(stringsLength)
+        assert(len(data) == stringsLength)
         for key in offsets:
             o = int(offsets[key])
             t = ""
@@ -90,7 +88,10 @@ def read_2(buffer, target):
             result[key] = sanitize_str(t)
         return result
     stringsLength = struct.unpack("<H", buffer.read(2))[0]
-    flags = read_flags(buffer, 16)
+    flags = struct.unpack("<H", buffer.read(2))[0]
+    if flags == 0:
+        if not (buffer.tell() == os.fstat(buffer.fileno()).st_size):
+            flags = struct.unpack("<H", buffer.read(2))[0]
     read_conf = (
         (read_numbers, ("<i", 1)),          #0  - 1 x int
         (read_numbers, ("<f", 1)),          #1  - 1 x float 
@@ -106,10 +107,14 @@ def read_2(buffer, target):
         (read_numbers, ("<f", 4)),          #11 - 4 x float
         (read_strings, (stringsLength, 0)), #12 - strings
         # TODO: are strings stored at the end of file allways??
-        #(read_numbers, tuple("<q")),           #13 - long long
+        (read_numbers, ("<q", 1)),           #13 - long long
     )
+    if flags & (1 << 13):
+        print("Found long long!", file=sys.stderr)
+    assert(not bool(flags & (1 << 14)))
+    assert(not bool(flags & (1 << 15)))
     for x in range(0, 16):
-        if flags[x]:
+        if flags & (1 << x):
             if x < len(read_conf):
                 target.update(read_conf[x][0](buffer, *(read_conf[x][1])))
             else:
@@ -158,6 +163,7 @@ def read(buffer, result = None):
         read_1(buffer, target)
     else:
         raise "Unknow version!"
+    assert(buffer.tell() == os.fstat(buffer.fileno()).st_size)
     return result
     
 # reads .inibin from binary file on filesystem

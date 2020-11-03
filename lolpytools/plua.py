@@ -80,7 +80,7 @@ def read(buffer):
         # 5 GETGLOBAL Read a global variable into a register
         elif op == 5:
             index = K(bx)[0]
-            value = G[index] if index in G else index
+            value = G[index] if index in G else "~~" + index
             R(a)[0] = value
         # 6 GETTABLE Read a table element into a register
         elif op == 6:
