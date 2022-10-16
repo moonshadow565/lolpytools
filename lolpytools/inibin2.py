@@ -118,7 +118,7 @@ def read_2(buffer, target):
             if x < len(read_conf):
                 target.update(read_conf[x][0](buffer, *(read_conf[x][1])))
             else:
-                raise "Unknown inibin flag {} in {}!".format(x, buffer.name)
+                raise ValueError("Unknown inibin flag {} in {}!".format(x, buffer.name))
     return target
 
 # reads version 1 .inibin
@@ -162,7 +162,7 @@ def read(buffer, result = None):
     elif version == 1:
         read_1(buffer, target)
     else:
-        raise "Unknow version!"
+        raise ValueError("Unknow version!")
     assert(buffer.tell() == os.fstat(buffer.fileno()).st_size)
     return result
     
