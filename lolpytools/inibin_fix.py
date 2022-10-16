@@ -4,7 +4,7 @@ COMMENTS=("%s", "'%s")
 
 def ihash(value, ret = 0):
     for c in value:
-        ret = (ord(c.lower()) +((65599 * ret) & 0xffffffff)) & 0xffffffff
+        ret = (ord(c.lower()) + ((65599 * ret) & 0xffffffff)) & 0xffffffff
     return ret
 
 def a_ihash(sections, names):
@@ -65,9 +65,23 @@ def map_vars(*args):
         *[ "Map%d_%s" % (x,a) for a in args for x in range(0, 15) ],
     ]
 
-#FIXME: Blacklisted stuff: "UnitBarData", "MapObjects", "GeneralCharacterData"
+#FIXME: Blacklisted stuff: "MapObjects"
 
-all_inibin_fixlist = [
+todo_rename1 = [
+    'UnitSingle',
+    'UnitDouble',
+    'Dragon',
+    'Ward',
+    'Baron',
+    'Turret',
+    'NexusPaladin',
+    'NexusMage',
+    'InhibPaladin',
+    'InhibMage',
+    'Counter'
+]
+
+all_inibin_fixlist: list[list[list[str]]] = [
 # TODO: LEVELS/MapX/AtmosphereMutators.inibin (Atmosphere*mutators)
 # LEVELS/MapX/Audio.inibin
     [
@@ -88,6 +102,7 @@ all_inibin_fixlist = [
         [
             "EventLookupTable",
             "NumOfSoundBanks",
+            *[ f'SoundBank{i}' for i in range(1, 23) ],
         ],
     ],
 # LEVELS/MapX/clouds.inibin
@@ -377,6 +392,8 @@ all_inibin_fixlist = [
             "EdgeEnhancement",
             "EdgeTintPoint",
             "Upscale",
+            "BaseMapBrightness",
+            "UVAnimate",
         ],
     ],
     [
@@ -741,11 +758,7 @@ all_inibin_fixlist = [
         ],
     ],
 # DATA/Menu_SC4/GeneralCharacterData.inibin
-# TODO: Do we need this?
-    [
-        [ "AttackData", ],
-        [ "AttackAutoInterruptPercent", ],
-    ],
+# DATA/Menu_SC4/UnitBarData.inibin
     [
         [ "GeneralDataHero", ],
         [ 
@@ -759,7 +772,160 @@ all_inibin_fixlist = [
             "FullHealthAlpha",
             "MaxHealthTicks",
             "ZeroHealthAlpha",
+
+            'MPBarColor',
+            'OtherBarColor',
+            'ShieldBarColor',
+            'EnergyFadeColor',
+            'ShieldFadeColor',
+            'ChampionParallaxOffset',
+            'MPFadeColor',
+            'OtherFadeColor',
+            'EnergyBarColor',
         ],
+    ],
+    [
+        [  
+            *[ f'{x}_Backdrop' for x in todo_rename1 ],
+            *[
+                f'Champion{x}BackdropTemplate{y}'
+                for x in ['Self', 'Friendly', 'Enemy']
+                for y in ['Default', 'Spectator', 'Colorblind']
+            ],
+            'ChampionLoCBarBackdropTemplate',
+            'ChampionChatBubbleTemplate',
+
+        ],
+        [
+            'BackgroundTexture',
+            * [ f'{x}{y}PixelRegion' for x in ['Highlight', 'Background'] for y in ['Mid', 'Left', 'Right'] ],
+        ],
+    ],
+    [
+        [
+            *[ f'{x}_{y}Bar' for x in todo_rename1 for y in ['Health', 'Timer', 'Par'] ],
+            *[ f'Champion{x}BarTemplate' for x in ['Health', 'PAR', 'LoC'] ],
+        ],
+        [
+            'BarTexture',
+            'BarPixelRegion',
+            'MegaTickPixelRegion',
+            'TickPixelWidth',
+            'TickPixelRegion',
+        ]
+    ],
+    [
+        [
+            f'{x}_UnitParams{y}{z}'
+            for x in todo_rename1
+            for y in ['Friendly', 'Enemy', 'Neutral']
+            for z in ['Default', 'Spectator', 'Colorblind']
+        ],
+        [
+            'MagicShieldColor',
+            'HealthBarColor',
+            'PhysShieldColor',
+            'FadeSpeed',
+            'HealthFadeColor',
+            'AllShieldColor',
+
+            'HighlightColor',
+            'MidHorizontalScaling',
+            'AggroIndicatorOffset',
+            'HPBarStartOffset',
+            'BackgroundColor',
+            'TimerBarColor',
+            'TimerBarStartOffset',
+            'PowerBarColor',
+            'PowerBarStartOffset',
+            'HealthTextOffset',
+        ]
+    ],
+    [
+        [
+            f'HealthBarChampion{x}{y}'
+            for x in ['Self', 'Friendly', 'Enemy']
+            for y in ['Default', 'Spectator', 'Colorblind']
+        ],
+        [
+            'MagicShieldColor',
+            'HealthBarColor',
+            'PhysShieldColor',
+            'FadeSpeed',
+            'HealthFadeColor',
+            'AllShieldColor',
+
+            'LevelTextOffset',
+            'PercentageOffset',
+            'HealthFillColor',
+            'ChatBubbleOffset',
+            'HealthOffset',
+            'LoCOffset',
+            'TitleTextOffset',
+            'PAROffset',
+        ]
+    ],
+    [
+        [
+            * [ f'{x}_HealthText' for x in todo_rename1 ],
+            * [ f'Champion{x}TextTemplate' for x in [ 'Level', 'Title' ] ]
+        ],
+        [
+            'FontName',
+            'DropShadowDepth',
+        ],
+    ],
+    [
+        [ 'HealthBarSettings' ],
+        [
+            * [
+                x.format(y)
+                for x in [
+                    'DefaultHealthPer{}Tick',
+                    'MaxHealth{}Ticks',
+                    '{}TickThickness',
+                    '{}TickAlpha',
+                    '{}TickHeight'
+                ]
+                for y in [ '', 'Micro', 'Mega' ]
+            ],
+            'GoTransparent',
+            'UseCompression',
+        ]
+    ],
+    [
+        [ f'Champion{x}LoCBarIconData' for x in ['Self', 'Friendly', 'Enemy'] ],
+        [
+            'RootTexture',
+            'CharmTexture',
+            'AirborneTexture',
+            'SuppressionTexture',
+            'BlindTexture',
+            'SilenceTexture',
+            'TauntTexture',
+            'DisarmTexture',
+            'SlowTexture',
+            'StunTexture',
+            'FearTexture',
+            
+            'IconWidth',
+            'IconHeight',
+            'IconOffsetX',
+            'IconOffsetY',
+            'AdditionalIconOffsetX',
+            'AdditionalIconOffsetY',
+        ],
+    ],
+    [
+        [ 'UnitAggroEffect' ],
+        [
+            'TextureSheet',
+            *[
+                f'KeyFrame{x}_{y}'
+                for x in range(1, 12 + 1)
+                for y in ['Time', 'PixelRegion']
+            ],
+        ]
     ],
 # DATA/LoadingScreen/
     [

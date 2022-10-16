@@ -8,7 +8,7 @@ COMMENTS=("%s", "'%s")
 
 def ihash(value, ret = 0):
     for c in value:
-        ret = (ord(c.lower()) +((65599 * ret) & 0xffffffff)) & 0xffffffff
+        ret = (ord(c.lower()) + ((65599 * ret) & 0xffffffff)) & 0xffffffff
     return ret
 
 def a_ihash(sections, names):

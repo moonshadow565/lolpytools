@@ -54,7 +54,7 @@ def read(buffer):
     def unpack(what):
         return what.unpack_from(buffer.read(what.size))
     if not magic == b"RLSM":
-        raise "Wrong releasemanifest magic!"
+        raise ValueError("Wrong releasemanifest magic!")
     majorV, minorV, prNameIndex, releaseV, = unpack(s_header)
     folderC, = unpack(s_count)
     folders = [ rel_folder(buffer) for x in range(0, folderC) ]

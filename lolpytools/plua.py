@@ -33,7 +33,7 @@ def read(buffer):
         
     magic = readx(12)
     if not magic == b'\x1B\x4C\x75\x61\x51\x00\x01\x04\x04\x04\x08\x00':
-        raise "Magic doesn't match"
+        raise ValueError("Magic doesn't match")
     source = read_str()
     flags = readx(12)
     ops = read_list(read_op)
@@ -53,7 +53,7 @@ def read(buffer):
         return x if e == 0 else (x | 8) * (2 ** (e -1))
     while True:
         if pc >= len(ops):
-            raise "Pc out of range!"
+            raise ValueError("Pc out of range!")
         code = ops[pc]
         pc = pc + 1
         op = code & 0b111111
@@ -127,7 +127,7 @@ def read(buffer):
             R(a)[0] = "<CLOUSURE>"
             pc = pc + 1
         else:
-            raise "Unknown opcode: {}".format(op)
+            raise ValueError("Unknown opcode: {}".format(op))
     return {
         "Values": G
     }

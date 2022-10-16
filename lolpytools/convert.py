@@ -5,23 +5,29 @@ from . import troybin_fix
 from . import plua
 import json
 
+def rrepr(value):
+    # Otherwise, the League does not read colors
+    if isinstance(value, float) and value % 1 == 0:
+        return str(int(value))
+    return repr(value)
+
 def writeini(ibin, outfile):
     def write_value(name, value):
         if isinstance(value, str):
-            outfile.write('{}={}\n'.format(name, json.dumps(value)))
+            outfile.write('{}={}\n'.format(name, value))
         elif isinstance(value, bool):
-            outfile.write('{}={}\n'.format(name, '1' if value else '0'))
+            outfile.write('{}={}\n'.format(name, 'true' if value else 'false'))
         elif isinstance(value, list) or isinstance(value, tuple):
-            outfile.write('{}={}\n'.format(name, ' '.join([repr(x) for x in value])))
+            outfile.write('{}={}\n'.format(name, ' '.join([rrepr(x) for x in value])))
         elif isinstance(value, int):
             outfile.write('{}={}\n'.format(name, value))
         elif isinstance(value, float):
-            outfile.write('{}={}\n'.format(name, repr(value)))
+            outfile.write('{}={}\n'.format(name, rrepr(value)))
         else:
             raise Exception("Unknown type: {}".format(type(value)))
     for section, names in sorted(ibin["Values"].items()):
         outfile.write('[{}]\n'.format(section))
-        for name,value in sorted(names.items()):
+        for name, value in sorted(names.items()):
             write_value(name, value)
         outfile.write('\n')
     if len(ibin["UNKNOWN_HASHES"]) > 0:
@@ -71,7 +77,9 @@ def writelua(lua, outfile):
             else:
                 outfile.write("{\n")
                 isarray = verify_array(value)
-                for tkey, tvalue in sorted(value.items()):
+                #TODO: Find out why the error occurs
+                #for tkey, tvalue in sorted(value.items()):
+                for tkey, tvalue in value.items():
                     outfile.write(" " * ((indent + 1) * 4))
                     if not isarray:
                         outfile.write("[")
